@@ -12,6 +12,7 @@ class _MyAppState extends State<MyApp> {
   var _ratingController = TextEditingController();
   double _rating;
   double _userRating = 3.0;
+  bool _customize = false;
 
   @override
   void initState() {
@@ -51,9 +52,14 @@ class _MyAppState extends State<MyApp> {
               ),
               FlutterRatingBar(
                 initialRating: 3,
-                fillColor: Colors.amber,
-                borderColor: Colors.amber.withAlpha(50),
                 allowHalfRating: true,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                fullRatingWidget:
+                    _customize ? _image("assets/heart.png") : null,
+                halfRatingWidget:
+                    _customize ? _image("assets/heart_half.png") : null,
+                noRatingWidget:
+                    _customize ? _image("assets/heart_border.png") : null,
                 onRatingUpdate: (rating) {
                   setState(() {
                     _rating = rating;
@@ -84,6 +90,7 @@ class _MyAppState extends State<MyApp> {
               ),
               FlutterRatingBarIndicator(
                 rating: _userRating,
+                pathClipper: _customize ? DiamondClipper() : null,
                 itemCount: 5,
                 itemSize: 50.0,
                 emptyColor: Colors.amber.withAlpha(50),
@@ -132,10 +139,61 @@ class _MyAppState extends State<MyApp> {
                 physics: BouncingScrollPhysics(),
                 emptyColor: Colors.amber.withAlpha(50),
               ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Switch to custom example",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                  Switch(
+                    value: _customize,
+                    onChanged: (value) {
+                      setState(() {
+                        _customize = value;
+                      });
+                    },
+                    activeColor: Colors.amber,
+                  ),
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget _image(String asset) {
+    return Image.asset(
+      asset,
+      height: 30.0,
+      width: 30.0,
+      color: Colors.amber,
+    );
+  }
+}
+
+class DiamondClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    final len = size.width;
+    path.lineTo(0, 1 / 4 * len);
+    path.lineTo(1 / 4 * len, 0);
+    path.lineTo(3 / 4 * len, 0);
+    path.lineTo(len, 1 / 4 * len);
+    path.lineTo(1 / 2 * len, len);
+    path.lineTo(0, 1 / 4 * len);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }

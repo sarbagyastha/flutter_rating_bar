@@ -1,8 +1,8 @@
 # Flutter Rating Bar
 
-[![pub package](https://img.shields.io/badge/pub-v1.0.0-green.svg)](https://pub.dartlang.org/packages/flutter_rating_bar)  [![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
+[![pub package](https://img.shields.io/badge/pub-v1.1.0-green.svg)](https://pub.dartlang.org/packages/flutter_rating_bar)  [![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
 
-A simple rating bar for flutter which also include a rating bar indicator, supporting any fraction of rating.
+A simple yet fully customizable ratingbar for flutter which also include a rating bar indicator, supporting any fraction of rating.
 
 ![DEMO](rating_demo.gif) 
 
@@ -14,7 +14,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_rating_bar: ^1.0.0
+  flutter_rating_bar: ^1.1.0
 ```
 
 #### 2\. Install
@@ -59,6 +59,46 @@ FlutterRatingBarIndicator(
 ```
 
 In order to make the indicator scrollable, just use 'physics' property as in the [example](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/example/lib/main.dart).
+
+## Customize Rating Bar
+```dart
+FlutterRatingBarIndicator(
+    rating: _userRating,
+    pathClipper: DiamondClipper(),
+    itemCount: 5,
+    itemSize: 50.0,
+    emptyColor: Colors.amber.withAlpha(50),
+),
+
+class DiamondClipper extends CustomClipper<Path> {...}
+```
+
+## Customize Rating Bar Indicator
+```dart
+FlutterRatingBar(
+     initialRating: 2.87,
+     allowHalfRating: true,
+     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+     fullRatingWidget: _image("assets/heart.png") ,
+     halfRatingWidget: _image("assets/heart_half.png"),
+     noRatingWidget: _image("assets/heart_border.png"),
+     onRatingUpdate: (rating) {
+         print(rating);
+     },
+),
+
+Widget _image(String asset) {
+    return Image.asset(
+      asset,
+      height: 30.0,
+      width: 30.0,
+      color: Colors.amber,
+    );
+}
+```
+
+## After Customization
+![CUSTOM DEMO](custom_example.png) 
 
 ## License
 

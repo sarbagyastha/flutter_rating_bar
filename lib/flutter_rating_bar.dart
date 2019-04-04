@@ -3,17 +3,32 @@ import 'package:flutter/material.dart';
 typedef RatingCallback(double rating);
 
 class FlutterRatingBarIndicator extends StatefulWidget {
+  ///[rating] takes the rating value for indicator. if [rating]==null value defaults to 0.0
   final double rating;
+
+  ///[itemCount] is the count of rating bar items.
   final int itemCount;
+
+  /// [itemSize] of each rating item in the bar.
   final double itemSize;
+
+  /// [itemPadding] gives padding to each rating item.
   final EdgeInsets itemPadding;
+
+  /// [fillColor] fills the rating indicator on rated part.
   final Color fillColor;
+
+  /// [physics] controls the scrolling behaviour of rating bar. Default is [NeverScrollableScrollPhysics].
   final ScrollPhysics physics;
+
+  /// [emptyColor] fills the rating indicator on unrated part.
   final Color emptyColor;
+
+  /// [pathClipper] takes CustomClipper to generate custom-shapes for rating items.
   final CustomClipper<Path> pathClipper;
 
   FlutterRatingBarIndicator({
-    this.rating = 3.27,
+    this.rating = 0.0,
     this.itemCount = 5,
     this.itemSize = 30.0,
     this.itemPadding = const EdgeInsets.all(4.0),
@@ -114,13 +129,38 @@ class StarClipper extends CustomClipper<Path> {
 }
 
 class FlutterRatingBar extends StatefulWidget {
+  ///[itemCount] is the count of rating bar items.
   final int itemCount;
+
+  ///[initialRating] is initial rating to be set to the rating bar.
   final double initialRating;
+
+  ///[onRatingUpdate] is a callback which return current rating.
   final RatingCallback onRatingUpdate;
+
+  ///[fillColor] colors [halfRatingWidget] and [fullRatingWidget].
   final Color fillColor;
+
+  /// [borderColor] colors the [noRatingWidget].
   final Color borderColor;
-  final double size;
+
+  /// [itemSize] of each rating item in the bar.
+  final double itemSize;
+
+  ///Default [allowHalfRating] = false. Setting true enables half rating support.
   final bool allowHalfRating;
+
+  ///[fullRatingWidget] denotes the full rating status. Default is Icon(Icons.star).
+  final Widget fullRatingWidget;
+
+  ///[halfRatingWidget] denotes the half rating status. Default is Icon(Icons.star_half).
+  final Widget halfRatingWidget;
+
+  ///[noRatingWidget] denotes the full rating status. Default is Icon(Icons.star_border).
+  final Widget noRatingWidget;
+
+  /// [itemPadding] gives padding to each rating item.
+  final EdgeInsets itemPadding;
 
   FlutterRatingBar({
     this.itemCount = 5,
@@ -128,8 +168,12 @@ class FlutterRatingBar extends StatefulWidget {
     @required this.onRatingUpdate,
     this.fillColor = Colors.amber,
     this.borderColor,
-    this.size = 40.0,
+    this.itemSize = 40.0,
     this.allowHalfRating = false,
+    this.fullRatingWidget,
+    this.halfRatingWidget,
+    this.noRatingWidget,
+    this.itemPadding = const EdgeInsets.all(0.0),
   });
 
   @override
@@ -162,35 +206,38 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
         children: List.generate(
           widget.itemCount,
           (index) {
-            return buildStar(context, index);
+            return _buildRating(context, index);
           },
         ),
       ),
     );
   }
 
-  Widget buildStar(BuildContext context, int index) {
-    Icon icon;
+  Widget _buildRating(BuildContext context, int index) {
+    Widget ratingWidget;
     if (index >= _rating) {
-      icon = Icon(
-        Icons.star_border,
-        color: widget.borderColor ?? Theme.of(context).primaryColor,
-        size: widget.size ?? 25.0,
-      );
+      ratingWidget = widget.noRatingWidget ??
+          Icon(
+            Icons.star_border,
+            color: widget.borderColor ?? Colors.amber.withAlpha(100),
+            size: widget.itemSize ?? 25.0,
+          );
     } else if (index > _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
         index < _rating) {
-      icon = Icon(
-        Icons.star_half,
-        color: widget.fillColor ?? Theme.of(context).primaryColor,
-        size: widget.size ?? 25.0,
-      );
+      ratingWidget = widget.halfRatingWidget ??
+          Icon(
+            Icons.star_half,
+            color: widget.fillColor,
+            size: widget.itemSize ?? 25.0,
+          );
       iconRating += 0.5;
     } else {
-      icon = Icon(
-        Icons.star,
-        color: widget.fillColor ?? Theme.of(context).primaryColor,
-        size: widget.size ?? 25.0,
-      );
+      ratingWidget = widget.fullRatingWidget ??
+          Icon(
+            Icons.star,
+            color: widget.fillColor,
+            size: widget.itemSize ?? 25.0,
+          );
       iconRating += 1.0;
     }
 
@@ -210,21 +257,24 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
       onHorizontalDragUpdate: (dragDetails) {
         RenderBox box = context.findRenderObject();
         var _pos = box.globalToLocal(dragDetails.globalPosition);
-        var i = _pos.dx / widget.size;
-        var newRating = widget.allowHalfRating ? i : i.round().toDouble();
-        if (newRating > widget.itemCount) {
-          newRating = widget.itemCount.toDouble();
+        var i = _pos.dx / widget.itemSize;
+        var currentRating = widget.allowHalfRating ? i : i.round().toDouble();
+        if (currentRating > widget.itemCount) {
+          currentRating = widget.itemCount.toDouble();
         }
-        if (newRating < 0) {
-          newRating = 0.0;
+        if (currentRating < 0) {
+          currentRating = 0.0;
         }
         if (widget.onRatingUpdate != null) {
           setState(() {
-            _rating = newRating;
+            _rating = currentRating;
           });
         }
       },
-      child: icon,
+      child: Padding(
+        padding: widget.itemPadding,
+        child: ratingWidget,
+      ),
     );
   }
 }
