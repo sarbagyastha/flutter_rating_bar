@@ -101,6 +101,7 @@ Heart Icons are [Available Here](https://github.com/sarbagyastha/flutter_rating_
 
 ## After Customization
 ![CUSTOM DEMO](custom_example.png =250x) 
+<img src="custom_example.png" width="200">
 
 ## License
 
