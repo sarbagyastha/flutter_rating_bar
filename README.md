@@ -100,8 +100,7 @@ Widget _image(String asset) {
 Heart Icons are [Available Here](https://github.com/sarbagyastha/flutter_rating_bar/tree/master/example/assets).
 
 ## After Customization
-![CUSTOM DEMO](custom_example.png =250x) 
-<img src="custom_example.png" width="200">
+<img src="custom_example.png" width="200" alt="Custom Demo">
 
 ## License
 
