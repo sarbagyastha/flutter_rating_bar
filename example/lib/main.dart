@@ -53,6 +53,9 @@ class _MyAppState extends State<MyApp> {
               FlutterRatingBar(
                 initialRating: 3,
                 allowHalfRating: true,
+                ignoreGestures: false,
+                tapOnlyMode: false,
+                itemCount: 6,
                 itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
                 fullRatingWidget:
                     _customize ? _image("assets/heart.png") : null,

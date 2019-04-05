@@ -1,6 +1,6 @@
 # Flutter Rating Bar
 
-[![pub package](https://img.shields.io/badge/pub-v1.1.0-green.svg)](https://pub.dartlang.org/packages/flutter_rating_bar)  [![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
+[![pub package](https://img.shields.io/badge/pub-v1.1.1-green.svg)](https://pub.dartlang.org/packages/flutter_rating_bar)  [![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
 
 A simple yet fully customizable ratingbar for flutter which also include a rating bar indicator, supporting any fraction of rating.
 
@@ -14,7 +14,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_rating_bar: ^1.1.0
+  flutter_rating_bar: ^1.1.1
 ```
 
 #### 2\. Install
@@ -60,20 +60,10 @@ FlutterRatingBarIndicator(
 
 In order to make the indicator scrollable, just use 'physics' property as in the [example](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/example/lib/main.dart).
 
-## Customize Rating Bar
-```dart
-FlutterRatingBarIndicator(
-    rating: _userRating,
-    pathClipper: DiamondClipper(),
-    itemCount: 5,
-    itemSize: 50.0,
-    emptyColor: Colors.amber.withAlpha(50),
-),
-
-class DiamondClipper extends CustomClipper<Path> {...}
-```
 
 ## Customize Rating Bar Indicator
+![CUSTOM_DEMO](heart_rating.png) 
+
 ```dart
 FlutterRatingBar(
      initialRating: 2.87,
@@ -99,8 +89,28 @@ Widget _image(String asset) {
 
 Heart Icons are [Available Here](https://github.com/sarbagyastha/flutter_rating_bar/tree/master/example/assets).
 
-## After Customization
-<img src="custom_example.png" width="200" alt="Custom Demo">
+
+## Customize Rating Bar
+![CUSTOM_DEMO](diamond_rating.png) 
+
+```dart
+FlutterRatingBarIndicator(
+    rating: _userRating,
+    pathClipper: DiamondClipper(),
+    itemCount: 5,
+    itemSize: 50.0,
+    emptyColor: Colors.amber.withAlpha(50),
+),
+
+class DiamondClipper extends CustomClipper<Path> {...}
+```
+
+DiamondClipper can be found [here](https://github.com/sarbagyastha/flutter_rating_bar/tree/master/example/assets).
+
+## Info
+To know more about the available properties, head on to [api docs](https://pub.dartlang.org/documentation/flutter_rating_bar/latest/flutter_rating_bar/flutter_rating_bar-library.html).
+
+Feel Free to request any missing features or report issues [here](https://github.com/sarbagyastha/flutter_rating_bar/issues).
 
 ## License
 

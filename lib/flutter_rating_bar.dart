@@ -162,6 +162,12 @@ class FlutterRatingBar extends StatefulWidget {
   /// [itemPadding] gives padding to each rating item.
   final EdgeInsets itemPadding;
 
+  /// [ignoreGestures]=false, if set to true will disable any gestures over the rating bar.
+  final bool ignoreGestures;
+
+  /// [tapOnlyMode]=false, if set to true will disable drag to rate feature. Note: Enabling this mode will disable half rating capability.
+  final bool tapOnlyMode;
+
   FlutterRatingBar({
     this.itemCount = 5,
     this.initialRating = 0.0,
@@ -174,6 +180,8 @@ class FlutterRatingBar extends StatefulWidget {
     this.halfRatingWidget,
     this.noRatingWidget,
     this.itemPadding = const EdgeInsets.all(0.0),
+    this.ignoreGestures = false,
+    this.tapOnlyMode = false,
   });
 
   @override
@@ -241,39 +249,45 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
       iconRating += 1.0;
     }
 
-    return GestureDetector(
-      onTap: () {
-        if (widget.onRatingUpdate != null) {
-          widget.onRatingUpdate(index + 1.0);
-          setState(() {
-            _rating = index + 1.0;
-          });
-        }
-      },
-      onHorizontalDragEnd: (_) {
-        widget.onRatingUpdate(iconRating);
-        iconRating = 0.0;
-      },
-      onHorizontalDragUpdate: (dragDetails) {
-        RenderBox box = context.findRenderObject();
-        var _pos = box.globalToLocal(dragDetails.globalPosition);
-        var i = _pos.dx / widget.itemSize;
-        var currentRating = widget.allowHalfRating ? i : i.round().toDouble();
-        if (currentRating > widget.itemCount) {
-          currentRating = widget.itemCount.toDouble();
-        }
-        if (currentRating < 0) {
-          currentRating = 0.0;
-        }
-        if (widget.onRatingUpdate != null) {
-          setState(() {
-            _rating = currentRating;
-          });
-        }
-      },
-      child: Padding(
-        padding: widget.itemPadding,
-        child: ratingWidget,
+    return IgnorePointer(
+      ignoring: widget.ignoreGestures,
+      child: GestureDetector(
+        onTap: () {
+          if (widget.onRatingUpdate != null) {
+            widget.onRatingUpdate(index + 1.0);
+            setState(() {
+              _rating = index + 1.0;
+            });
+          }
+        },
+        onHorizontalDragEnd: (_) {
+          widget.onRatingUpdate(iconRating);
+          iconRating = 0.0;
+        },
+        onHorizontalDragUpdate: (dragDetails) {
+          if (!widget.tapOnlyMode) {
+            RenderBox box = context.findRenderObject();
+            var _pos = box.globalToLocal(dragDetails.globalPosition);
+            var i = _pos.dx / widget.itemSize;
+            var currentRating =
+                widget.allowHalfRating ? i : i.round().toDouble();
+            if (currentRating > widget.itemCount) {
+              currentRating = widget.itemCount.toDouble();
+            }
+            if (currentRating < 0) {
+              currentRating = 0.0;
+            }
+            if (widget.onRatingUpdate != null) {
+              setState(() {
+                _rating = currentRating;
+              });
+            }
+          }
+        },
+        child: Padding(
+          padding: widget.itemPadding,
+          child: ratingWidget,
+        ),
       ),
     );
   }
