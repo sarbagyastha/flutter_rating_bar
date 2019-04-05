@@ -105,7 +105,7 @@ FlutterRatingBarIndicator(
 class DiamondClipper extends CustomClipper<Path> {...}
 ```
 
-DiamondClipper can be found [here](https://github.com/sarbagyastha/flutter_rating_bar/tree/master/example/assets).
+DiamondClipper can be found [here](https://github.com/sarbagyastha/flutter_rating_bar/blob/49711b850853bc4ab703be6f6cd0d4097ac4071d/example/lib/main.dart#L185).
 
 ## Info
 To know more about the available properties, head on to [api docs](https://pub.dartlang.org/documentation/flutter_rating_bar/latest/flutter_rating_bar/flutter_rating_bar-library.html).
