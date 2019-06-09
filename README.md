@@ -1,6 +1,6 @@
 # Flutter Rating Bar
 
-[![pub package](https://img.shields.io/badge/pub-v1.1.1-green.svg)](https://pub.dartlang.org/packages/flutter_rating_bar)  [![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
+[![pub package](https://img.shields.io/badge/pub-v1.2.0-green.svg)](https://pub.dartlang.org/packages/flutter_rating_bar)  [![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
 
 A simple yet fully customizable ratingbar for flutter which also include a rating bar indicator, supporting any fraction of rating.
 
@@ -14,7 +14,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_rating_bar: ^1.1.1
+  flutter_rating_bar: ^1.2.0
 ```
 
 #### 2\. Install
