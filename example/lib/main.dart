@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                 height: 20.0,
               ),
               FlutterRatingBar(
-                initialRating: 3,
+                initialRating: 2.5,
                 allowHalfRating: true,
                 ignoreGestures: false,
                 tapOnlyMode: false,

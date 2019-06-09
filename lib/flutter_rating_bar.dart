@@ -230,7 +230,7 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
             color: widget.borderColor ?? Colors.amber.withAlpha(100),
             size: widget.itemSize ?? 25.0,
           );
-    } else if (index > _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
+    } else if (index >= _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
         index < _rating) {
       ratingWidget = widget.halfRatingWidget ??
           Icon(
