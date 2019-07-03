@@ -13,6 +13,7 @@ class _MyAppState extends State<MyApp> {
   double _rating;
   double _userRating = 3.0;
   bool _customize = false;
+  bool _isRTLMode = false;
 
   @override
   void initState() {
@@ -32,140 +33,169 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('Flutter Rating Bar'),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(
-                height: 40.0,
-              ),
-              Text(
-                "Rating Bar",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 24.0,
+        body: Directionality(
+          textDirection: _isRTLMode ? TextDirection.rtl : TextDirection.ltr,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(
+                  height: 40.0,
                 ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              FlutterRatingBar(
-                initialRating: 2.5,
-                allowHalfRating: true,
-                ignoreGestures: false,
-                tapOnlyMode: false,
-                itemCount: 6,
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                fullRatingWidget:
-                    _customize ? _image("assets/heart.png") : null,
-                halfRatingWidget:
-                    _customize ? _image("assets/heart_half.png") : null,
-                noRatingWidget:
-                    _customize ? _image("assets/heart_border.png") : null,
-                onRatingUpdate: (rating) {
-                  setState(() {
-                    _rating = rating;
-                  });
-                },
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              _rating != null
-                  ? Text(
-                      "Rating: $_rating",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  : Container(),
-              SizedBox(
-                height: 40.0,
-              ),
-              Text(
-                "Rating Indicator",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 24.0,
+                Text(
+                  "Rating Bar",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 24.0,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              FlutterRatingBarIndicator(
-                rating: _userRating,
-                pathClipper: _customize ? DiamondClipper() : null,
-                itemCount: 5,
-                itemSize: 50.0,
-                emptyColor: Colors.amber.withAlpha(50),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextFormField(
-                  controller: _ratingController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Enter rating",
-                    labelText: "Enter rating",
-                    suffixIcon: MaterialButton(
-                      onPressed: () {
+                SizedBox(
+                  height: 20.0,
+                ),
+                FlutterRatingBar(
+                  initialRating: 2.5,
+                  allowHalfRating: true,
+                  ignoreGestures: false,
+                  tapOnlyMode: false,
+                  itemCount: 6,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  //textDirection:
+                  //_isRTLMode ? TextDirection.rtl : TextDirection.ltr,
+                  fullRatingWidget:
+                      _customize ? _image("assets/heart.png") : null,
+                  halfRatingWidget:
+                      _customize ? _image("assets/heart_half.png") : null,
+                  noRatingWidget:
+                      _customize ? _image("assets/heart_border.png") : null,
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                      _rating = rating;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _rating != null
+                    ? Text(
+                        "Rating: $_rating",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    : Container(),
+                SizedBox(
+                  height: 40.0,
+                ),
+                Text(
+                  "Rating Indicator",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 24.0,
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                FlutterRatingBarIndicator(
+                  textDirection:
+                      _isRTLMode ? TextDirection.rtl : TextDirection.ltr,
+                  rating: _userRating,
+                  pathClipper: _customize ? DiamondClipper() : null,
+                  itemCount: 5,
+                  itemSize: 50.0,
+                  emptyColor: Colors.amber.withAlpha(50),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextFormField(
+                    controller: _ratingController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Enter rating",
+                      labelText: "Enter rating",
+                      suffixIcon: MaterialButton(
+                        onPressed: () {
+                          setState(() {
+                            _userRating =
+                                double.parse(_ratingController.text ?? "0.0");
+                          });
+                        },
+                        child: Text("Rate"),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 40.0,
+                ),
+                Text(
+                  "Scrollable Rating Indicator",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 24.0,
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                FlutterRatingBarIndicator(
+                  textDirection:
+                      _isRTLMode ? TextDirection.rtl : TextDirection.ltr,
+                  rating: 8.2,
+                  itemCount: 20,
+                  itemSize: 30.0,
+                  physics: BouncingScrollPhysics(),
+                  emptyColor: Colors.amber.withAlpha(50),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Switch to custom example",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    Switch(
+                      value: _customize,
+                      onChanged: (value) {
                         setState(() {
-                          _userRating =
-                              double.parse(_ratingController.text ?? "0.0");
+                          _customize = value;
                         });
                       },
-                      child: Text("Rate"),
+                      activeColor: Colors.amber,
                     ),
-                  ),
+                  ],
                 ),
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
-              Text(
-                "Scrollable Rating Indicator",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 24.0,
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              FlutterRatingBarIndicator(
-                rating: 8.2,
-                itemCount: 20,
-                itemSize: 30.0,
-                physics: BouncingScrollPhysics(),
-                emptyColor: Colors.amber.withAlpha(50),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Switch to custom example",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Switch to RTL Mode",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
-                  ),
-                  Switch(
-                    value: _customize,
-                    onChanged: (value) {
-                      setState(() {
-                        _customize = value;
-                      });
-                    },
-                    activeColor: Colors.amber,
-                  ),
-                ],
-              ),
-            ],
+                    Switch(
+                      value: _isRTLMode,
+                      onChanged: (value) {
+                        setState(() {
+                          _isRTLMode = value;
+                        });
+                      },
+                      activeColor: Colors.amber,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

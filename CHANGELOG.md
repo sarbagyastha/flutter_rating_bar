@@ -1,3 +1,8 @@
+## 1.3.0
+* **FEATURE ADDED** Added Support for RTL Mode [Issue #5](https://github.com/sarbagyastha/flutter_rating_bar/issues/5)
+* **FIXED** Fixed issue with allowHalfRating [Issue #6](https://github.com/sarbagyastha/flutter_rating_bar/issues/6)
+
+
 ## 1.2.0
 * **FIXED** [Issue #2](https://github.com/sarbagyastha/flutter_rating_bar/issues/2).
 

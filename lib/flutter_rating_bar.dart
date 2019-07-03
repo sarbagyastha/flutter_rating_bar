@@ -27,6 +27,9 @@ class FlutterRatingBarIndicator extends StatefulWidget {
   /// [pathClipper] takes CustomClipper to generate custom-shapes for rating items.
   final CustomClipper<Path> pathClipper;
 
+  /// The text flows from right to left if [textDirection] = TextDirection.rtl
+  final TextDirection textDirection;
+
   FlutterRatingBarIndicator({
     this.rating = 0.0,
     this.itemCount = 5,
@@ -36,6 +39,7 @@ class FlutterRatingBarIndicator extends StatefulWidget {
     this.emptyColor = Colors.white,
     this.physics = const NeverScrollableScrollPhysics(),
     this.pathClipper,
+    this.textDirection,
   });
 
   @override
@@ -46,6 +50,7 @@ class FlutterRatingBarIndicator extends StatefulWidget {
 class _FlutterRatingBarIndicatorState extends State<FlutterRatingBarIndicator> {
   double _ratingFraction = 0.0;
   int _ratingNumber = 0;
+  bool _isRTL = false;
 
   @override
   void initState() {
@@ -63,48 +68,62 @@ class _FlutterRatingBarIndicatorState extends State<FlutterRatingBarIndicator> {
       physics: widget.physics,
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        textDirection: _isRTL ? TextDirection.rtl : TextDirection.ltr,
         children: List.generate(
           widget.itemCount,
           (index) {
-            return Padding(
-              padding: widget.itemPadding,
-              child: ClipPath(
-                clipper: widget.pathClipper ?? StarClipper(),
-                clipBehavior: Clip.antiAlias,
-                child: Container(
-                  height: widget.itemSize,
-                  width: widget.itemSize,
-                  child: index + 1 > _ratingNumber
-                      ? Container(
-                          color: widget.emptyColor,
-                          width: widget.itemSize,
-                          height: widget.itemSize,
-                        )
-                      : Row(
-                          children: <Widget>[
-                            Container(
-                              height: widget.itemSize,
-                              width: index + 1 == _ratingNumber
-                                  ? _ratingFraction
-                                  : widget.itemSize,
-                              color: widget.fillColor,
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: widget.itemSize,
-                                color: widget.emptyColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-            );
+            if (widget.textDirection != null) {
+              if (widget.textDirection == TextDirection.rtl &&
+                  Directionality.of(context) != TextDirection.rtl) {
+                return Transform(
+                  transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+                  alignment: Alignment.center,
+                  transformHitTests: false,
+                  child: _buildItems(index),
+                );
+              }
+            }
+            return _buildItems(index);
           },
         ),
       ),
     );
   }
+
+  Widget _buildItems(int index) => Padding(
+        padding: widget.itemPadding,
+        child: ClipPath(
+          clipper: widget.pathClipper ?? StarClipper(),
+          clipBehavior: Clip.antiAlias,
+          child: Container(
+            height: widget.itemSize,
+            width: widget.itemSize,
+            child: index + 1 > _ratingNumber
+                ? Container(
+                    color: widget.emptyColor,
+                    width: widget.itemSize,
+                    height: widget.itemSize,
+                  )
+                : Row(
+                    children: <Widget>[
+                      Container(
+                        height: widget.itemSize,
+                        width: index + 1 == _ratingNumber
+                            ? _ratingFraction
+                            : widget.itemSize,
+                        color: widget.fillColor,
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: widget.itemSize,
+                          color: widget.emptyColor,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+        ),
+      );
 }
 
 class StarClipper extends CustomClipper<Path> {
@@ -168,6 +187,9 @@ class FlutterRatingBar extends StatefulWidget {
   /// [tapOnlyMode]=false, if set to true will disable drag to rate feature. Note: Enabling this mode will disable half rating capability.
   final bool tapOnlyMode;
 
+  /// The text flows from right to left if [textDirection] = TextDirection.rtl
+  final TextDirection textDirection;
+
   FlutterRatingBar({
     this.itemCount = 5,
     this.initialRating = 0.0,
@@ -182,6 +204,7 @@ class FlutterRatingBar extends StatefulWidget {
     this.itemPadding = const EdgeInsets.all(0.0),
     this.ignoreGestures = false,
     this.tapOnlyMode = false,
+    this.textDirection,
   });
 
   @override
@@ -192,6 +215,7 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
   double _rating = 0.0;
   double _ratingHistory = 0.0;
   double iconRating = 0.0;
+  bool _isRTL = false;
 
   @override
   void initState() {
@@ -202,6 +226,8 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
 
   @override
   Widget build(BuildContext context) {
+    _isRTL = (widget.textDirection ?? Directionality.of(context)) ==
+        TextDirection.rtl;
     if (_ratingHistory != widget.initialRating) {
       _rating = widget.initialRating;
       _ratingHistory = widget.initialRating;
@@ -211,6 +237,7 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
       color: Colors.transparent,
       child: Wrap(
         alignment: WrapAlignment.start,
+        textDirection: _isRTL ? TextDirection.rtl : TextDirection.ltr,
         children: List.generate(
           widget.itemCount,
           (index) {
@@ -231,13 +258,22 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
             size: widget.itemSize ?? 25.0,
           );
     } else if (index >= _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
-        index < _rating) {
+        index < _rating &&
+        widget.allowHalfRating) {
       ratingWidget = widget.halfRatingWidget ??
           Icon(
             Icons.star_half,
             color: widget.fillColor,
             size: widget.itemSize ?? 25.0,
           );
+      if (_isRTL) {
+        ratingWidget = Transform(
+          transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+          alignment: Alignment.center,
+          transformHitTests: false,
+          child: ratingWidget,
+        );
+      }
       iconRating += 0.5;
     } else {
       ratingWidget = widget.fullRatingWidget ??
@@ -276,6 +312,9 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
             }
             if (currentRating < 0) {
               currentRating = 0.0;
+            }
+            if (_isRTL) {
+              currentRating = widget.itemCount - currentRating;
             }
             if (widget.onRatingUpdate != null) {
               setState(() {
