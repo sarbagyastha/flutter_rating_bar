@@ -1,6 +1,11 @@
 # Flutter Rating Bar
 
-[![pub package](https://img.shields.io/badge/pub-v1.3.0-green.svg)](https://pub.dartlang.org/packages/flutter_rating_bar)  [![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
+[![Pub](https://img.shields.io/pub/vpre/flutter_rating_bar.svg)](https://pub.dartlang.org/packages/flutter_rating_bar) 
+[![License](https://img.shields.io/badge/licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
+[![Download](https://img.shields.io/badge/download-APK-blueviolet.svg)](https://github.com/sarbagyastha/flutter_rating_bar/raw/master/frb_demo.apk)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/sarbagyastha/flutter_rating_bar.svg)](https://github.com/sarbagyastha/flutter_rating_bar)
+[![GitHub stars](https://img.shields.io/github/stars/sarbagyastha/flutter_rating_bar.svg?style=social)](https://github.com/sarbagyastha/flutter_rating_bar)
+
 
 A simple yet fully customizable rating bar for flutter which also include a rating bar indicator, supporting any fraction of rating.
 
@@ -8,32 +13,9 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 
 ## Usage
 
-#### 1\. Depend
 
-Add this to you package's `pubspec.yaml` file:
 
-```yaml
-dependencies:
-  flutter_rating_bar: ^1.3.0
-```
-
-#### 2\. Install
-
-Run command:
-
-```bash
-$ flutter packages get
-```
-
-#### 3\. Import
-
-Import in Dart code:
-
-```dart
-import 'package:flutter_rating_bar/flutter_rating_bar';
-```
-
-#### 4\. Using Flutter Rating Bar
+#### Using Flutter Rating Bar
 
 ```dart
 FlutterRatingBar(
@@ -47,7 +29,7 @@ FlutterRatingBar(
 ),
 ```
 
-#### 5\. Using Flutter Rating Bar Indicator
+#### Using Flutter Rating Bar Indicator
 
 ```dart
 FlutterRatingBarIndicator(
