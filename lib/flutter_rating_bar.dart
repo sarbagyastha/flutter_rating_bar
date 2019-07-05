@@ -61,6 +61,8 @@ class _FlutterRatingBarIndicatorState extends State<FlutterRatingBarIndicator> {
 
   @override
   Widget build(BuildContext context) {
+    _isRTL = (widget.textDirection ?? Directionality.of(context)) ==
+        TextDirection.rtl;
     _ratingNumber = widget.rating.truncate() + 1;
     _ratingFraction = (widget.rating - _ratingNumber + 1) * widget.itemSize;
     return SingleChildScrollView(

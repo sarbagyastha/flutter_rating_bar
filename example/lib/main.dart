@@ -54,8 +54,8 @@ class _MyAppState extends State<MyApp> {
                   height: 20.0,
                 ),
                 FlutterRatingBar(
-                  initialRating: 2.5,
-                  allowHalfRating: true,
+                  initialRating: 3,
+                  allowHalfRating: false,
                   ignoreGestures: false,
                   tapOnlyMode: false,
                   itemCount: 6,
@@ -97,8 +97,6 @@ class _MyAppState extends State<MyApp> {
                   height: 20.0,
                 ),
                 FlutterRatingBarIndicator(
-                  textDirection:
-                      _isRTLMode ? TextDirection.rtl : TextDirection.ltr,
                   rating: _userRating,
                   pathClipper: _customize ? DiamondClipper() : null,
                   itemCount: 5,
@@ -143,8 +141,6 @@ class _MyAppState extends State<MyApp> {
                   height: 20.0,
                 ),
                 FlutterRatingBarIndicator(
-                  textDirection:
-                      _isRTLMode ? TextDirection.rtl : TextDirection.ltr,
                   rating: 8.2,
                   itemCount: 20,
                   itemSize: 30.0,

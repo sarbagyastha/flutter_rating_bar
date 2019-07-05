@@ -14,7 +14,6 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 ## Usage
 
 
-
 #### Using Flutter Rating Bar
 
 ```dart

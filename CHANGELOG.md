@@ -1,3 +1,6 @@
+## 1.3.0+1
+* **FIXED** Rating Indicator not switching to RTL mode.
+
 ## 1.3.0
 * **FEATURE ADDED** Added Support for RTL Mode [Issue #5](https://github.com/sarbagyastha/flutter_rating_bar/issues/5)
 * **FIXED** Fixed issue with allowHalfRating [Issue #6](https://github.com/sarbagyastha/flutter_rating_bar/issues/6)
