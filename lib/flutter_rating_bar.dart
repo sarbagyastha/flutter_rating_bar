@@ -1,53 +1,197 @@
 import 'package:flutter/material.dart';
 
-typedef RatingCallback(double rating);
+class RatingWidget {
+  final Widget full;
+  final Widget half;
+  final Widget empty;
 
-class FlutterRatingBarIndicator extends StatefulWidget {
-  ///[rating] takes the rating value for indicator. if [rating]==null value defaults to 0.0
+  RatingWidget({
+    @required this.full,
+    @required this.half,
+    @required this.empty,
+  });
+}
+
+class _HalfRatingWidget extends StatelessWidget {
+  final Widget child;
+  final double size;
+  final int alpha;
+  final bool enableMask;
+
+  const _HalfRatingWidget({
+    this.size,
+    this.child,
+    this.alpha,
+    this.enableMask = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: size,
+      width: size,
+      child: enableMask
+          ? Stack(
+              fit: StackFit.expand,
+              children: [
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: _NoRatingWidget(
+                    child: child,
+                    size: size,
+                    alpha: alpha,
+                  ),
+                ),
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: ClipRect(
+                    clipper: _HalfClipper(),
+                    child: child,
+                  ),
+                ),
+              ],
+            )
+          : FittedBox(child: child, fit: BoxFit.contain),
+    );
+  }
+}
+
+class _HalfClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) => Rect.fromLTWH(0, 0, size.width / 2, size.height);
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) => true;
+}
+
+class _NoRatingWidget extends StatelessWidget {
+  final double size;
+  final Widget child;
+  final int alpha;
+  final bool enableMask;
+
+  _NoRatingWidget({
+    this.size,
+    this.child,
+    this.alpha,
+    this.enableMask = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: size,
+      width: size,
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: enableMask
+            ? _ColorMask(
+                color: Colors.white.withAlpha(255 - alpha),
+                child: child,
+              )
+            : child,
+      ),
+    );
+  }
+}
+
+class _ColorMask extends StatelessWidget {
+  final Color color;
+  final Widget child;
+
+  _ColorMask({
+    Key key,
+    this.color,
+    this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) => LinearGradient(colors: [
+        color,
+        color,
+      ]).createShader(bounds),
+      blendMode: BlendMode.srcATop,
+      child: child,
+    );
+  }
+}
+
+class _IndicatorClipper extends CustomClipper<Rect> {
+  final double ratingFraction;
+
+  _IndicatorClipper({
+    this.ratingFraction,
+  });
+
+  @override
+  Rect getClip(Size size) =>
+      Rect.fromLTWH(0, 0, size.width * ratingFraction, size.height);
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) => true;
+}
+
+class RatingBarIndicator extends StatefulWidget {
+  ///[rating] takes the rating value for indicator. if [rating]==null value.
+  ///
+  /// Default = 0.0
   final double rating;
 
   ///[itemCount] is the count of rating bar items.
+  ///
+  /// Default = 5
   final int itemCount;
 
   /// [itemSize] of each rating item in the bar.
+  ///
+  /// Default = 30.0
   final double itemSize;
 
   /// [itemPadding] gives padding to each rating item.
+  ///
+  /// Default = EdgeInsets.all(4.0)
   final EdgeInsets itemPadding;
 
-  /// [fillColor] fills the rating indicator on rated part.
-  final Color fillColor;
-
-  /// [physics] controls the scrolling behaviour of rating bar. Default is [NeverScrollableScrollPhysics].
+  /// [physics] controls the scrolling behaviour of rating bar.
+  ///
+  /// Default is [NeverScrollableScrollPhysics].
   final ScrollPhysics physics;
-
-  /// [emptyColor] fills the rating indicator on unrated part.
-  final Color emptyColor;
-
-  /// [pathClipper] takes CustomClipper to generate custom-shapes for rating items.
-  final CustomClipper<Path> pathClipper;
 
   /// The text flows from right to left if [textDirection] = TextDirection.rtl
   final TextDirection textDirection;
 
-  FlutterRatingBarIndicator({
+  /// Defines the color opacity for unrated portion.
+  ///
+  /// Default = 80
+  final int alpha;
+
+  /// Widget for each rating bar indicator item.
+  final IndexedWidgetBuilder itemBuilder;
+
+  /// Direction or rating bar indicator. Either can be vertical or horizontal.
+  ///
+  /// Default = Axis.horizontal
+  final Axis direction;
+
+  RatingBarIndicator({
+    @required this.itemBuilder,
     this.rating = 0.0,
     this.itemCount = 5,
     this.itemSize = 30.0,
     this.itemPadding = const EdgeInsets.all(4.0),
-    this.fillColor = Colors.amber,
-    this.emptyColor = Colors.white,
     this.physics = const NeverScrollableScrollPhysics(),
-    this.pathClipper,
     this.textDirection,
+    this.alpha = 80,
+    this.direction = Axis.horizontal,
   });
 
   @override
-  _FlutterRatingBarIndicatorState createState() =>
-      _FlutterRatingBarIndicatorState();
+  _RatingBarIndicatorState createState() => _RatingBarIndicatorState();
 }
 
-class _FlutterRatingBarIndicatorState extends State<FlutterRatingBarIndicator> {
+class _RatingBarIndicatorState extends State<RatingBarIndicator> {
   double _ratingFraction = 0.0;
   int _ratingNumber = 0;
   bool _isRTL = false;
@@ -56,7 +200,7 @@ class _FlutterRatingBarIndicatorState extends State<FlutterRatingBarIndicator> {
   void initState() {
     super.initState();
     _ratingNumber = widget.rating.truncate() + 1;
-    _ratingFraction = (widget.rating - _ratingNumber + 1) * widget.itemSize;
+    _ratingFraction = widget.rating - _ratingNumber + 1;
   }
 
   @override
@@ -64,92 +208,91 @@ class _FlutterRatingBarIndicatorState extends State<FlutterRatingBarIndicator> {
     _isRTL = (widget.textDirection ?? Directionality.of(context)) ==
         TextDirection.rtl;
     _ratingNumber = widget.rating.truncate() + 1;
-    _ratingFraction = (widget.rating - _ratingNumber + 1) * widget.itemSize;
+    _ratingFraction = widget.rating - _ratingNumber + 1;
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: widget.direction,
       physics: widget.physics,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        textDirection: _isRTL ? TextDirection.rtl : TextDirection.ltr,
-        children: List.generate(
-          widget.itemCount,
-          (index) {
-            if (widget.textDirection != null) {
-              if (widget.textDirection == TextDirection.rtl &&
-                  Directionality.of(context) != TextDirection.rtl) {
-                return Transform(
-                  transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
-                  alignment: Alignment.center,
-                  transformHitTests: false,
-                  child: _buildItems(index),
-                );
-              }
-            }
-            return _buildItems(index);
-          },
-        ),
-      ),
+      child: widget.direction == Axis.horizontal
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              textDirection: _isRTL ? TextDirection.rtl : TextDirection.ltr,
+              children: _children(),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              textDirection: _isRTL ? TextDirection.rtl : TextDirection.ltr,
+              children: _children(),
+            ),
+    );
+  }
+
+  List<Widget> _children() {
+    return List.generate(
+      widget.itemCount,
+      (index) {
+        if (widget.textDirection != null) {
+          if (widget.textDirection == TextDirection.rtl &&
+              Directionality.of(context) != TextDirection.rtl) {
+            return Transform(
+              transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+              alignment: Alignment.center,
+              transformHitTests: false,
+              child: _buildItems(index),
+            );
+          }
+        }
+        return _buildItems(index);
+      },
     );
   }
 
   Widget _buildItems(int index) => Padding(
         padding: widget.itemPadding,
-        child: ClipPath(
-          clipper: widget.pathClipper ?? StarClipper(),
-          clipBehavior: Clip.antiAlias,
-          child: Container(
-            height: widget.itemSize,
-            width: widget.itemSize,
-            child: index + 1 > _ratingNumber
-                ? Container(
-                    color: widget.emptyColor,
-                    width: widget.itemSize,
-                    height: widget.itemSize,
-                  )
-                : Row(
-                    children: <Widget>[
-                      Container(
-                        height: widget.itemSize,
-                        width: index + 1 == _ratingNumber
-                            ? _ratingFraction
-                            : widget.itemSize,
-                        color: widget.fillColor,
+        child: SizedBox(
+          width: widget.itemSize,
+          height: widget.itemSize,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              FittedBox(
+                fit: BoxFit.contain,
+                child: index + 1 < _ratingNumber
+                    ? widget.itemBuilder(context, index)
+                    : _ColorMask(
+                        color: Colors.white.withAlpha(255 - widget.alpha),
+                        child: widget.itemBuilder(context, index),
                       ),
-                      Expanded(
-                        child: Container(
-                          height: widget.itemSize,
-                          color: widget.emptyColor,
+              ),
+              if (index + 1 == _ratingNumber)
+                _isRTL
+                    ? Transform(
+                        transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+                        alignment: Alignment.center,
+                        transformHitTests: false,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: ClipRect(
+                            clipper: _IndicatorClipper(
+                                ratingFraction: _ratingFraction),
+                            child: widget.itemBuilder(context, index),
+                          ),
+                        ),
+                      )
+                    : FittedBox(
+                        fit: BoxFit.contain,
+                        child: ClipRect(
+                          clipper: _IndicatorClipper(
+                              ratingFraction: _ratingFraction),
+                          child: widget.itemBuilder(context, index),
                         ),
                       ),
-                    ],
-                  ),
+            ],
           ),
         ),
       );
 }
 
-class StarClipper extends CustomClipper<Path> {
-  @override
-  getClip(Size size) {
-    final path = Path();
-    final len = size.width;
-    path.lineTo(0, len);
-    path.lineTo(1 / 5 * len, len);
-    path.lineTo(1 / 2 * len, 0);
-    path.lineTo(4 / 5 * len, len);
-    path.lineTo(0, 2 / 5 * len);
-    path.lineTo(len, 2 / 5 * len);
-    path.lineTo(1 / 5 * len, len);
-    path.lineTo(0, len);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper oldClipper) => true;
-}
-
-class FlutterRatingBar extends StatefulWidget {
+class RatingBar extends StatefulWidget {
   ///[itemCount] is the count of rating bar items.
   final int itemCount;
 
@@ -157,28 +300,13 @@ class FlutterRatingBar extends StatefulWidget {
   final double initialRating;
 
   ///[onRatingUpdate] is a callback which return current rating.
-  final RatingCallback onRatingUpdate;
-
-  ///[fillColor] colors [halfRatingWidget] and [fullRatingWidget].
-  final Color fillColor;
-
-  /// [borderColor] colors the [noRatingWidget].
-  final Color borderColor;
+  final ValueChanged<double> onRatingUpdate;
 
   /// [itemSize] of each rating item in the bar.
   final double itemSize;
 
   ///Default [allowHalfRating] = false. Setting true enables half rating support.
   final bool allowHalfRating;
-
-  ///[fullRatingWidget] denotes the full rating status. Default is Icon(Icons.star).
-  final Widget fullRatingWidget;
-
-  ///[halfRatingWidget] denotes the half rating status. Default is Icon(Icons.star_half).
-  final Widget halfRatingWidget;
-
-  ///[noRatingWidget] denotes the full rating status. Default is Icon(Icons.star_border).
-  final Widget noRatingWidget;
 
   /// [itemPadding] gives padding to each rating item.
   final EdgeInsets itemPadding;
@@ -192,38 +320,76 @@ class FlutterRatingBar extends StatefulWidget {
   /// The text flows from right to left if [textDirection] = TextDirection.rtl
   final TextDirection textDirection;
 
-  FlutterRatingBar({
+  /// Widget for each rating bar indicator item.
+  final IndexedWidgetBuilder itemBuilder;
+
+  /// Defines the color opacity for unrated portion.
+  ///
+  /// Default = 80
+  final int alpha;
+
+  /// Customizes the Rating Bar item with [RatingWidget].
+  final RatingWidget ratingWidget;
+
+  /// if set to true, Rating Bar item will glow ehen being touched.
+  ///
+  /// Default = true
+  final bool glow;
+
+  /// Defines the radius of glow.
+  ///
+  /// Default = 2
+  final double glowRadius;
+
+  /// Direction or rating bar indicator. Either can be vertical or horizontal.
+  ///
+  /// Default = Axis.horizontal
+  final Axis direction;
+
+  RatingBar({
     this.itemCount = 5,
     this.initialRating = 0.0,
     @required this.onRatingUpdate,
-    this.fillColor = Colors.amber,
-    this.borderColor,
+    this.alpha = 80,
     this.itemSize = 40.0,
     this.allowHalfRating = false,
-    this.fullRatingWidget,
-    this.halfRatingWidget,
-    this.noRatingWidget,
+    this.itemBuilder,
     this.itemPadding = const EdgeInsets.all(0.0),
     this.ignoreGestures = false,
     this.tapOnlyMode = false,
     this.textDirection,
-  });
+    this.ratingWidget,
+    this.glow = true,
+    this.glowRadius = 2,
+    this.direction = Axis.horizontal,
+  }) : assert(
+          (itemBuilder == null && ratingWidget != null) ||
+              (itemBuilder != null && ratingWidget == null),
+          'itemBuilder and ratingWidget can\'t be initialized at the same time. Either remove ratingWidget or itembuilder.',
+        );
 
   @override
-  _FlutterRatingBarState createState() => _FlutterRatingBarState();
+  _RatingBarState createState() => _RatingBarState();
 }
 
-class _FlutterRatingBarState extends State<FlutterRatingBar> {
+class _RatingBarState extends State<RatingBar> {
   double _rating = 0.0;
   double _ratingHistory = 0.0;
   double iconRating = 0.0;
   bool _isRTL = false;
+  ValueNotifier<bool> _glow = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
     _rating = widget.initialRating;
     _ratingHistory = widget.initialRating;
+  }
+
+  @override
+  void dispose() {
+    _glow.dispose();
+    super.dispose();
   }
 
   @override
@@ -240,6 +406,7 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
       child: Wrap(
         alignment: WrapAlignment.start,
         textDirection: _isRTL ? TextDirection.rtl : TextDirection.ltr,
+        direction: widget.direction,
         children: List.generate(
           widget.itemCount,
           (index) {
@@ -253,21 +420,21 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
   Widget _buildRating(BuildContext context, int index) {
     Widget ratingWidget;
     if (index >= _rating) {
-      ratingWidget = widget.noRatingWidget ??
-          Icon(
-            Icons.star_border,
-            color: widget.borderColor ?? Colors.amber.withAlpha(100),
-            size: widget.itemSize ?? 25.0,
-          );
+      ratingWidget = _NoRatingWidget(
+        size: widget.itemSize,
+        child: widget.ratingWidget?.empty ?? widget.itemBuilder(context, index),
+        enableMask: widget.ratingWidget == null,
+        alpha: widget.alpha,
+      );
     } else if (index >= _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
         index < _rating &&
         widget.allowHalfRating) {
-      ratingWidget = widget.halfRatingWidget ??
-          Icon(
-            Icons.star_half,
-            color: widget.fillColor,
-            size: widget.itemSize ?? 25.0,
-          );
+      ratingWidget = _HalfRatingWidget(
+        size: widget.itemSize,
+        child: widget.ratingWidget?.half ?? widget.itemBuilder(context, index),
+        enableMask: widget.ratingWidget == null,
+        alpha: widget.alpha,
+      );
       if (_isRTL) {
         ratingWidget = Transform(
           transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
@@ -278,12 +445,15 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
       }
       iconRating += 0.5;
     } else {
-      ratingWidget = widget.fullRatingWidget ??
-          Icon(
-            Icons.star,
-            color: widget.fillColor,
-            size: widget.itemSize ?? 25.0,
-          );
+      ratingWidget = SizedBox(
+        width: widget.itemSize,
+        height: widget.itemSize,
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child:
+              widget.ratingWidget?.full ?? widget.itemBuilder(context, index),
+        ),
+      );
       iconRating += 1.0;
     }
 
@@ -298,38 +468,93 @@ class _FlutterRatingBarState extends State<FlutterRatingBar> {
             });
           }
         },
-        onHorizontalDragEnd: (_) {
-          widget.onRatingUpdate(iconRating);
-          iconRating = 0.0;
+        onHorizontalDragStart: (_) {
+          if (widget.direction == Axis.horizontal) _glow.value = true;
         },
-        onHorizontalDragUpdate: (dragDetails) {
-          if (!widget.tapOnlyMode) {
-            RenderBox box = context.findRenderObject();
-            var _pos = box.globalToLocal(dragDetails.globalPosition);
-            var i = _pos.dx / widget.itemSize;
-            var currentRating =
-                widget.allowHalfRating ? i : i.round().toDouble();
-            if (currentRating > widget.itemCount) {
-              currentRating = widget.itemCount.toDouble();
-            }
-            if (currentRating < 0) {
-              currentRating = 0.0;
-            }
-            if (_isRTL) {
-              currentRating = widget.itemCount - currentRating;
-            }
-            if (widget.onRatingUpdate != null) {
-              setState(() {
-                _rating = currentRating;
-              });
-            }
+        onHorizontalDragEnd: (_) {
+          if (widget.direction == Axis.horizontal) {
+            _glow.value = false;
+            widget.onRatingUpdate(iconRating);
+            iconRating = 0.0;
           }
+        },
+        onHorizontalDragUpdate: (dragUpdates) {
+          if (widget.direction == Axis.horizontal)
+            _dragOperation(dragUpdates, widget.direction);
+        },
+        onVerticalDragStart: (_) {
+          if (widget.direction == Axis.vertical) _glow.value = true;
+        },
+        onVerticalDragEnd: (_) {
+          if (widget.direction == Axis.vertical) {
+            _glow.value = false;
+            widget.onRatingUpdate(iconRating);
+            iconRating = 0.0;
+          }
+        },
+        onVerticalDragUpdate: (dragUpdates) {
+          if (widget.direction == Axis.vertical)
+            _dragOperation(dragUpdates, widget.direction);
         },
         child: Padding(
           padding: widget.itemPadding,
-          child: ratingWidget,
+          child: ValueListenableBuilder(
+            valueListenable: _glow,
+            builder: (context, glow, _) {
+              if (glow && widget.glow) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.amber.withAlpha(30),
+                        blurRadius: 10,
+                        spreadRadius: widget.glowRadius,
+                      ),
+                      BoxShadow(
+                        color: Colors.amber.withAlpha(20),
+                        blurRadius: 10,
+                        spreadRadius: widget.glowRadius,
+                      ),
+                    ],
+                  ),
+                  child: ratingWidget,
+                );
+              } else {
+                return ratingWidget;
+              }
+            },
+          ),
         ),
       ),
     );
+  }
+
+  void _dragOperation(DragUpdateDetails dragDetails, Axis direction) {
+    if (!widget.tapOnlyMode) {
+      RenderBox box = context.findRenderObject();
+      var _pos = box.globalToLocal(dragDetails.globalPosition);
+      double i;
+      if (direction == Axis.horizontal) {
+        i = _pos.dx / (widget.itemSize + widget.itemPadding.horizontal);
+      } else {
+        i = _pos.dy / (widget.itemSize + widget.itemPadding.vertical);
+      }
+      var currentRating = widget.allowHalfRating ? i : i.round().toDouble();
+      if (currentRating > widget.itemCount) {
+        currentRating = widget.itemCount.toDouble();
+      }
+      if (currentRating < 0) {
+        currentRating = 0.0;
+      }
+      if (_isRTL && widget.direction == Axis.horizontal) {
+        currentRating = widget.itemCount - currentRating;
+      }
+      if (widget.onRatingUpdate != null) {
+        setState(() {
+          _rating = currentRating;
+        });
+      }
+    }
   }
 }

@@ -12,8 +12,9 @@ class _MyAppState extends State<MyApp> {
   var _ratingController = TextEditingController();
   double _rating;
   double _userRating = 3.0;
-  bool _customize = false;
+  int _ratingBarMode = 1;
   bool _isRTLMode = false;
+  bool _isVertical = false;
 
   @override
   void initState() {
@@ -43,37 +44,8 @@ class _MyAppState extends State<MyApp> {
                 SizedBox(
                   height: 40.0,
                 ),
-                Text(
-                  "Rating Bar",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 24.0,
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                FlutterRatingBar(
-                  initialRating: 3,
-                  allowHalfRating: false,
-                  ignoreGestures: false,
-                  tapOnlyMode: false,
-                  itemCount: 6,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                  //textDirection:
-                  //_isRTLMode ? TextDirection.rtl : TextDirection.ltr,
-                  fullRatingWidget:
-                      _customize ? _image("assets/heart.png") : null,
-                  halfRatingWidget:
-                      _customize ? _image("assets/heart_half.png") : null,
-                  noRatingWidget:
-                      _customize ? _image("assets/heart_border.png") : null,
-                  onRatingUpdate: (rating) {
-                    setState(() {
-                      _rating = rating;
-                    });
-                  },
-                ),
+                _heading('Rating Bar'),
+                _ratingBar(_ratingBarMode),
                 SizedBox(
                   height: 20.0,
                 ),
@@ -86,22 +58,16 @@ class _MyAppState extends State<MyApp> {
                 SizedBox(
                   height: 40.0,
                 ),
-                Text(
-                  "Rating Indicator",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 24.0,
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                FlutterRatingBarIndicator(
+                _heading('Rating Indicator'),
+                RatingBarIndicator(
                   rating: _userRating,
-                  pathClipper: _customize ? DiamondClipper() : null,
+                  itemBuilder: (context, index) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
                   itemCount: 5,
                   itemSize: 50.0,
-                  emptyColor: Colors.amber.withAlpha(50),
+                  direction: _isVertical ? Axis.vertical : Axis.horizontal,
                 ),
                 SizedBox(
                   height: 20.0,
@@ -130,40 +96,47 @@ class _MyAppState extends State<MyApp> {
                 SizedBox(
                   height: 40.0,
                 ),
-                Text(
-                  "Scrollable Rating Indicator",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 24.0,
+                _heading('Scrollable Rating Indicator'),
+                RatingBarIndicator(
+                  rating: 8.2,
+                  itemCount: 20,
+                  itemSize: 30.0,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
                   ),
                 ),
                 SizedBox(
                   height: 20.0,
                 ),
-                FlutterRatingBarIndicator(
-                  rating: 8.2,
-                  itemCount: 20,
-                  itemSize: 30.0,
-                  physics: BouncingScrollPhysics(),
-                  emptyColor: Colors.amber.withAlpha(50),
+                Text(
+                  "Rating Bar Modes",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                  ),
                 ),
-                SizedBox(
-                  height: 20.0,
+                Row(
+                  children: [
+                    _radio(1),
+                    _radio(2),
+                    _radio(3),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Switch to custom example",
+                      'Switch to Vertical Bar',
                       style: TextStyle(
                         fontWeight: FontWeight.w300,
                       ),
                     ),
                     Switch(
-                      value: _customize,
+                      value: _isVertical,
                       onChanged: (value) {
                         setState(() {
-                          _customize = value;
+                          _isVertical = value;
                         });
                       },
                       activeColor: Colors.amber,
@@ -174,7 +147,7 @@ class _MyAppState extends State<MyApp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Switch to RTL Mode",
+                      'Switch to RTL Mode',
                       style: TextStyle(
                         fontWeight: FontWeight.w300,
                       ),
@@ -198,6 +171,113 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  Widget _radio(int value) {
+    return Expanded(
+      child: RadioListTile(
+        value: value,
+        groupValue: _ratingBarMode,
+        dense: true,
+        title: Text(
+          'Mode $value',
+          style: TextStyle(
+            fontWeight: FontWeight.w300,
+            fontSize: 12.0,
+          ),
+        ),
+        onChanged: (value) {
+          setState(() {
+            _ratingBarMode = value;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _ratingBar(int mode) {
+    switch (mode) {
+      case 1:
+        return RatingBar(
+          initialRating: 3,
+          direction: _isVertical ? Axis.vertical : Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          itemBuilder: (context, _) => Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          onRatingUpdate: (rating) {
+            setState(() {
+              _rating = rating;
+            });
+          },
+        );
+      case 2:
+        return RatingBar(
+          initialRating: 3,
+          direction: _isVertical ? Axis.vertical : Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          ratingWidget: RatingWidget(
+            full: _image('assets/heart.png'),
+            half: _image('assets/heart_half.png'),
+            empty: _image('assets/heart_border.png'),
+          ),
+          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          onRatingUpdate: (rating) {
+            setState(() {
+              _rating = rating;
+            });
+          },
+        );
+      case 3:
+        return RatingBar(
+          initialRating: 3,
+          direction: _isVertical ? Axis.vertical : Axis.horizontal,
+          itemCount: 5,
+          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return Icon(
+                  Icons.sentiment_very_dissatisfied,
+                  color: Colors.amber,
+                );
+              case 1:
+                return Icon(
+                  Icons.sentiment_dissatisfied,
+                  color: Colors.amber,
+                );
+              case 2:
+                return Icon(
+                  Icons.sentiment_neutral,
+                  color: Colors.amber,
+                );
+              case 3:
+                return Icon(
+                  Icons.sentiment_satisfied,
+                  color: Colors.amber,
+                );
+              case 4:
+                return Icon(
+                  Icons.sentiment_very_satisfied,
+                  color: Colors.amber,
+                );
+              default:
+                return Container();
+            }
+          },
+          onRatingUpdate: (rating) {
+            setState(() {
+              _rating = rating;
+            });
+          },
+        );
+      default:
+        return Container();
+    }
+  }
+
   Widget _image(String asset) {
     return Image.asset(
       asset,
@@ -206,23 +286,19 @@ class _MyAppState extends State<MyApp> {
       color: Colors.amber,
     );
   }
-}
 
-class DiamondClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    final len = size.width;
-    path.lineTo(0, 1 / 4 * len);
-    path.lineTo(1 / 4 * len, 0);
-    path.lineTo(3 / 4 * len, 0);
-    path.lineTo(len, 1 / 4 * len);
-    path.lineTo(1 / 2 * len, len);
-    path.lineTo(0, 1 / 4 * len);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+  Widget _heading(String text) => Column(
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 24.0,
+            ),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+        ],
+      );
 }

@@ -15,78 +15,105 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 
 
 #### Using Flutter Rating Bar
+Rating Bar can be used in three ways.
 
+###### First Way:
+Using itemBuilder
 ```dart
-FlutterRatingBar(
-      initialRating: 3,
-      fillColor: Colors.amber,
-      borderColor: Colors.amber.withAlpha(50),
-      allowHalfRating: true,
-      onRatingUpdate: (rating) {
-           print(rating);
-      },
-),
+RatingBar(
+   initialRating: 3,
+   direction: Axis.horizontal,
+   allowHalfRating: true,
+   itemCount: 5,
+   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+   itemBuilder: (context, _) => Icon(
+     Icons.star,
+     color: Colors.amber,
+   ),
+   onRatingUpdate: (rating) {
+     print(rating);
+   },
+);
+```
+
+###### Second Way:
+Using rating widgets
+```dart
+RatingBar(
+   initialRating: 3,
+   direction: Axis.horizontal,
+   allowHalfRating: true,
+   itemCount: 5,
+   ratingWidget: RatingWidget(
+     full: _image('assets/heart.png'),
+     half: _image('assets/heart_half.png'),
+     empty: _image('assets/heart_border.png'),
+   ),
+   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+   onRatingUpdate: (rating) {
+     print(rating);
+   },
+);
+```
+Heart Icons are [Available Here](https://github.com/sarbagyastha/flutter_rating_bar/tree/master/example/assets).
+
+###### Third Way:
+Using item builder with index
+```dart
+RatingBar(
+    initialRating: 3,
+    itemCount: 5,
+    itemBuilder: (context, index) {
+       switch (index) {
+          case 0:
+             return Icon(
+                Icons.sentiment_very_dissatisfied,
+                color: Colors.amber,
+             );
+          case 1:
+             return Icon(
+                Icons.sentiment_dissatisfied,
+                color: Colors.amber,
+             );
+          case 2:
+             return Icon(
+                Icons.sentiment_neutral,
+                color: Colors.amber,
+             );
+          case 3:
+             return Icon(
+                Icons.sentiment_satisfied,
+                color: Colors.amber,
+             );
+          case 4:
+              return Icon(
+                Icons.sentiment_very_satisfied,
+                color: Colors.amber,
+              );
+       }
+    },
+    onRatingUpdate: (rating) {
+      print(rating);
+    },
+;
 ```
 
 #### Using Flutter Rating Bar Indicator
 
 ```dart
-FlutterRatingBarIndicator(
-     rating: 2.75,
-     itemCount: 5,
-     itemSize: 50.0,
-     emptyColor: Colors.amber.withAlpha(50),
+RatingBarIndicator(
+    rating: 2.75,
+    itemBuilder: (context, index) => Icon(
+         Icons.star,
+         color: Colors.amber,
+    ),
+    itemCount: 5,
+    itemSize: 50.0,
+    direction: Axis.vertical,
 ),
 ```
 
 In order to make the indicator scrollable, just use 'physics' property as in the [example](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/example/lib/main.dart).
-
-
-## Customize Rating Bar Indicator
-![CUSTOM_DEMO](heart_rating.png) 
-
-```dart
-FlutterRatingBar(
-     initialRating: 2.87,
-     allowHalfRating: true,
-     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-     fullRatingWidget: _image("assets/heart.png") ,
-     halfRatingWidget: _image("assets/heart_half.png"),
-     noRatingWidget: _image("assets/heart_border.png"),
-     onRatingUpdate: (rating) {
-         print(rating);
-     },
-),
-
-Widget _image(String asset) {
-    return Image.asset(
-      asset,
-      height: 30.0,
-      width: 30.0,
-      color: Colors.amber,
-    );
-}
-```
-
-Heart Icons are [Available Here](https://github.com/sarbagyastha/flutter_rating_bar/tree/master/example/assets).
-
-
-## Customize Rating Bar
-![CUSTOM_DEMO](diamond_rating.png) 
-
-```dart
-FlutterRatingBarIndicator(
-    rating: _userRating,
-    pathClipper: DiamondClipper(),
-    itemCount: 5,
-    itemSize: 50.0,
-    emptyColor: Colors.amber.withAlpha(50),
-),
-
-class DiamondClipper extends CustomClipper<Path> {...}
-```
-
-DiamondClipper can be found [here](https://github.com/sarbagyastha/flutter_rating_bar/blob/49711b850853bc4ab703be6f6cd0d4097ac4071d/example/lib/main.dart#L185).
 
 ## Info
 To know more about the available properties, head on to [api docs](https://pub.dartlang.org/documentation/flutter_rating_bar/latest/flutter_rating_bar/flutter_rating_bar-library.html).
