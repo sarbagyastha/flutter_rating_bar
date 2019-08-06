@@ -2,7 +2,7 @@
 
 [![Pub](https://img.shields.io/pub/vpre/flutter_rating_bar.svg)](https://pub.dartlang.org/packages/flutter_rating_bar) 
 [![License](https://img.shields.io/badge/licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
-[![Download](https://img.shields.io/badge/download-APK-blueviolet.svg)](https://github.com/sarbagyastha/flutter_rating_bar/raw/master/frb_demo.apk)
+[![Download](https://img.shields.io/badge/download-APK-blueviolet.svg)](https://github.com/sarbagyastha/flutter_rating_bar/raw/master/rating_bar.apk)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/sarbagyastha/flutter_rating_bar.svg)](https://github.com/sarbagyastha/flutter_rating_bar)
 [![GitHub stars](https://img.shields.io/github/stars/sarbagyastha/flutter_rating_bar.svg?style=social)](https://github.com/sarbagyastha/flutter_rating_bar)
 
