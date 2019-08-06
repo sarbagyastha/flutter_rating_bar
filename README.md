@@ -7,18 +7,29 @@
 [![GitHub stars](https://img.shields.io/github/stars/sarbagyastha/flutter_rating_bar.svg?style=social)](https://github.com/sarbagyastha/flutter_rating_bar)
 
 
+
+
 A simple yet fully customizable rating bar for flutter which also include a rating bar indicator, supporting any fraction of rating.
 
-![DEMO](rating_demo.gif) 
+![DEMO](flutter_rating_bar.gif) 
+
+## What's new in v2.x.x
+- Any widgets can be used as as rating bar/indicator items
+- Different widgets can be used in same rating bar as per position
+- Introduced vertical layout
+- Glow on interaction
+- Supports RTL mode
+
 
 ## Usage
-
 
 #### Using Flutter Rating Bar
 Rating Bar can be used in three ways.
 
 ###### First Way:
 Using itemBuilder
+
+![First Way](images/mode1.jpg) 
 ```dart
 RatingBar(
    initialRating: 3,
@@ -38,6 +49,8 @@ RatingBar(
 
 ###### Second Way:
 Using rating widgets
+
+![Second Way](images/mode2.jpg) 
 ```dart
 RatingBar(
    initialRating: 3,
@@ -59,6 +72,8 @@ Heart Icons are [Available Here](https://github.com/sarbagyastha/flutter_rating_
 
 ###### Third Way:
 Using item builder with index
+
+![Third Way](images/mode3.jpg) 
 ```dart
 RatingBar(
     initialRating: 3,
@@ -68,12 +83,12 @@ RatingBar(
           case 0:
              return Icon(
                 Icons.sentiment_very_dissatisfied,
-                color: Colors.amber,
+                color: Colors.red,
              );
           case 1:
              return Icon(
                 Icons.sentiment_dissatisfied,
-                color: Colors.amber,
+                color: Colors.redAccent,
              );
           case 2:
              return Icon(
@@ -83,12 +98,12 @@ RatingBar(
           case 3:
              return Icon(
                 Icons.sentiment_satisfied,
-                color: Colors.amber,
+                color: Colors.lightGreen,
              );
           case 4:
               return Icon(
                 Icons.sentiment_very_satisfied,
-                color: Colors.amber,
+                color: Colors.green,
               );
        }
     },
@@ -100,6 +115,7 @@ RatingBar(
 
 #### Using Flutter Rating Bar Indicator
 
+![Indicator](images/indicator.jpg) 
 ```dart
 RatingBarIndicator(
     rating: 2.75,
@@ -112,6 +128,9 @@ RatingBarIndicator(
     direction: Axis.vertical,
 ),
 ```
+
+#### Vertical Mode
+![Vertical](images/vertical.jpg) 
 
 In order to make the indicator scrollable, just use 'physics' property as in the [example](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/example/lib/main.dart).
 

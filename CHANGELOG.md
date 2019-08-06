@@ -1,3 +1,12 @@
+## 2.0.0
+**Breaking Changes**
+
+* `FlutterRatingBar` is renamed to `RatingBar` and `FlutterRatingBarIndicator` to `RatingBarIndicator`.
+* `itemBuilder` is introduced. Now you can use any widget as items with Rating Bar.  
+* Improved RTL Mode.
+* Vertical Mode.
+* Glow while rating.
+
 ## 1.3.0+1
 * **FIXED** Rating Indicator not switching to RTL mode.
 
