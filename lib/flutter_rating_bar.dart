@@ -18,6 +18,7 @@ class _HalfRatingWidget extends StatelessWidget {
   final int alpha;
   final bool enableMask;
   final bool rtlMode;
+  final Color unratedColor;
 
   _HalfRatingWidget({
     this.size,
@@ -25,6 +26,7 @@ class _HalfRatingWidget extends StatelessWidget {
     this.alpha,
     this.enableMask = true,
     this.rtlMode = false,
+    this.unratedColor = Colors.white,
   });
 
   @override
@@ -42,6 +44,7 @@ class _HalfRatingWidget extends StatelessWidget {
                     child: child,
                     size: size,
                     alpha: alpha,
+                    unratedColor: unratedColor,
                   ),
                 ),
                 FittedBox(
@@ -55,7 +58,10 @@ class _HalfRatingWidget extends StatelessWidget {
                 ),
               ],
             )
-          : FittedBox(child: child, fit: BoxFit.contain),
+          : FittedBox(
+              child: child,
+              fit: BoxFit.contain,
+            ),
     );
   }
 }
@@ -91,12 +97,14 @@ class _NoRatingWidget extends StatelessWidget {
   final Widget child;
   final int alpha;
   final bool enableMask;
+  final Color unratedColor;
 
   _NoRatingWidget({
     this.size,
     this.child,
     this.alpha,
     this.enableMask = true,
+    this.unratedColor = Colors.white,
   });
 
   @override
@@ -108,7 +116,7 @@ class _NoRatingWidget extends StatelessWidget {
         fit: BoxFit.contain,
         child: enableMask
             ? _ColorMask(
-                color: Colors.white.withAlpha(255 - alpha),
+                color: unratedColor.withAlpha(alpha),
                 child: child,
               )
             : child,
@@ -210,6 +218,9 @@ class RatingBarIndicator extends StatefulWidget {
   /// Default = Axis.horizontal
   final Axis direction;
 
+  /// Defines color for the unrated portion.
+  final Color unratedColor;
+
   RatingBarIndicator({
     @required this.itemBuilder,
     this.rating = 0.0,
@@ -220,6 +231,7 @@ class RatingBarIndicator extends StatefulWidget {
     this.textDirection,
     this.alpha = 80,
     this.direction = Axis.horizontal,
+    this.unratedColor = Colors.white,
   });
 
   @override
@@ -294,7 +306,7 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
                 child: index + 1 < _ratingNumber
                     ? widget.itemBuilder(context, index)
                     : _ColorMask(
-                        color: Colors.white.withAlpha(255 - widget.alpha),
+                        color: widget.unratedColor.withAlpha(widget.alpha),
                         child: widget.itemBuilder(context, index),
                       ),
               ),
@@ -384,6 +396,9 @@ class RatingBar extends StatefulWidget {
   /// Default = Axis.horizontal
   final Axis direction;
 
+  /// Defines color for unrated portion.
+  final Color unratedColor;
+
   RatingBar({
     this.itemCount = 5,
     this.initialRating = 0.0,
@@ -401,6 +416,7 @@ class RatingBar extends StatefulWidget {
     this.glowRadius = 2,
     this.direction = Axis.horizontal,
     this.glowColor,
+    this.unratedColor,
   }) : assert(
           (itemBuilder == null && ratingWidget != null) ||
               (itemBuilder != null && ratingWidget == null),
@@ -464,6 +480,7 @@ class _RatingBarState extends State<RatingBar> {
         child: widget.ratingWidget?.empty ?? widget.itemBuilder(context, index),
         enableMask: widget.ratingWidget == null,
         alpha: widget.alpha,
+        unratedColor: widget.unratedColor,
       );
     } else if (index >= _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
         index < _rating &&
@@ -474,15 +491,8 @@ class _RatingBarState extends State<RatingBar> {
         enableMask: widget.ratingWidget == null,
         alpha: widget.alpha,
         rtlMode: _isRTL,
+        unratedColor: widget.unratedColor,
       );
-      /*if (_isRTL) {
-        ratingWidget = Transform(
-          transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
-          alignment: Alignment.center,
-          transformHitTests: false,
-          child: ratingWidget,
-        );
-      }*/
       iconRating += 0.5;
     } else {
       ratingWidget = SizedBox(

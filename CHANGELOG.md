@@ -1,3 +1,6 @@
+## 2.0.0+1
+* Added `unratedColor` property. [Issue #12](https://github.com/sarbagyastha/flutter_rating_bar/issues/12)
+
 ## 2.0.0
 **Breaking Changes**
 
