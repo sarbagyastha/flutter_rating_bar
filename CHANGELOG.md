@@ -1,3 +1,7 @@
+## 2.0.0+2
+* **Fixed** Issue with `unratedColor` being null. [Issue #13 & #14](https://github.com/sarbagyastha/flutter_rating_bar/issues/13)
+* **Fixed** `alpha` property behaving in opposite manner.
+
 ## 2.0.0+1
 * Added `unratedColor` property. [Issue #12](https://github.com/sarbagyastha/flutter_rating_bar/issues/12)
 

@@ -116,7 +116,7 @@ class _NoRatingWidget extends StatelessWidget {
         fit: BoxFit.contain,
         child: enableMask
             ? _ColorMask(
-                color: unratedColor.withAlpha(alpha),
+                color: unratedColor.withAlpha(255 - alpha),
                 child: child,
               )
             : child,
@@ -306,7 +306,8 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
                 child: index + 1 < _ratingNumber
                     ? widget.itemBuilder(context, index)
                     : _ColorMask(
-                        color: widget.unratedColor.withAlpha(widget.alpha),
+                        color:
+                            widget.unratedColor.withAlpha(255 - widget.alpha),
                         child: widget.itemBuilder(context, index),
                       ),
               ),
@@ -376,7 +377,7 @@ class RatingBar extends StatefulWidget {
   /// Customizes the Rating Bar item with [RatingWidget].
   final RatingWidget ratingWidget;
 
-  /// if set to true, Rating Bar item will glow ehen being touched.
+  /// if set to true, Rating Bar item will glow when being touched.
   ///
   /// Default = true
   final bool glow;
@@ -416,11 +417,12 @@ class RatingBar extends StatefulWidget {
     this.glowRadius = 2,
     this.direction = Axis.horizontal,
     this.glowColor,
-    this.unratedColor,
+    this.unratedColor = Colors.white,
   }) : assert(
           (itemBuilder == null && ratingWidget != null) ||
               (itemBuilder != null && ratingWidget == null),
-          'itemBuilder and ratingWidget can\'t be initialized at the same time. Either remove ratingWidget or itembuilder.',
+          'itemBuilder and ratingWidget can\'t be initialized at the same time.'
+          'Either remove ratingWidget or itembuilder.',
         );
 
   @override

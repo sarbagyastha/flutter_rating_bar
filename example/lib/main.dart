@@ -223,8 +223,7 @@ class _MyAppState extends State<MyApp> {
           initialRating: 3,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
-          unratedColor: Colors.greenAccent,
-          alpha: 100,
+          alpha: 40,
           itemCount: 5,
           itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
           itemBuilder: (context, _) => Icon(
