@@ -1,3 +1,12 @@
+## 3.0.0
+**Breaking Changes**
+This version requires `flutter >= 1.9`.
+
+* Removed `alpha` property, as alpha vale can be provided directly with `unratedColor`.
+* Adjusted some default behaviours for size and unratedColor.
+* **FIXED** Issue while using RatingWidget in RTL mode.
+* Improved dart docs
+
 ## 2.0.0+2
 * **Fixed** Issue with `unratedColor` being null. [Issue #13 & #14](https://github.com/sarbagyastha/flutter_rating_bar/issues/13)
 * **Fixed** `alpha` property behaving in opposite manner.

@@ -1,8 +1,8 @@
-# Flutter Rating Bar
+![FLUTTER RATING BAR](rating_bar_banner.png)
 
-[![Pub](https://img.shields.io/pub/vpre/flutter_rating_bar.svg)](https://pub.dartlang.org/packages/flutter_rating_bar) 
+[![Pub](https://img.shields.io/pub/v/flutter_rating_bar.svg)](https://pub.dartlang.org/packages/flutter_rating_bar) 
 [![License](https://img.shields.io/badge/licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
-[![Download](https://img.shields.io/badge/download-APK-blueviolet.svg)](https://github.com/sarbagyastha/flutter_rating_bar/raw/master/rating_bar.apk)
+[![Download](https://img.shields.io/badge/download-APK-blueviolet.svg)](https://github.com/sarbagyastha/flutter_rating_bar/raw/master/rating_bar_demo.apk)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/sarbagyastha/flutter_rating_bar.svg)](https://github.com/sarbagyastha/flutter_rating_bar)
 [![GitHub stars](https://img.shields.io/github/stars/sarbagyastha/flutter_rating_bar.svg?style=social)](https://github.com/sarbagyastha/flutter_rating_bar)
 
@@ -13,7 +13,7 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 
 ![DEMO](flutter_rating_bar.gif) 
 
-## What's new in v2.x.x
+## What's new in v2.x.x and up
 - Any widgets can be used as as rating bar/indicator items
 - Different widgets can be used in same rating bar as per position
 - Introduced vertical layout

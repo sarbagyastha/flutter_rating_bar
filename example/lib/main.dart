@@ -106,8 +106,7 @@ class _MyAppState extends State<MyApp> {
                         suffixIcon: MaterialButton(
                           onPressed: () {
                             setState(() {
-                              _userRating =
-                                  double.parse(_ratingController.text ?? "0.0");
+                              _userRating = double.parse(_ratingController.text ?? "0.0");
                             });
                           },
                           child: Text("Rate"),
@@ -223,7 +222,7 @@ class _MyAppState extends State<MyApp> {
           initialRating: 3,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
-          alpha: 40,
+          unratedColor: Colors.grey[200],
           itemCount: 5,
           itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
           itemBuilder: (context, _) => Icon(
