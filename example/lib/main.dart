@@ -89,6 +89,7 @@ class _MyAppState extends State<MyApp> {
                     ),
                     itemCount: 5,
                     itemSize: 50.0,
+                    unratedColor: Colors.amber.withAlpha(50),
                     direction: _isVertical ? Axis.vertical : Axis.horizontal,
                   ),
                   SizedBox(
@@ -106,7 +107,8 @@ class _MyAppState extends State<MyApp> {
                         suffixIcon: MaterialButton(
                           onPressed: () {
                             setState(() {
-                              _userRating = double.parse(_ratingController.text ?? "0.0");
+                              _userRating =
+                                  double.parse(_ratingController.text ?? "0.0");
                             });
                           },
                           child: Text("Rate"),
@@ -222,8 +224,9 @@ class _MyAppState extends State<MyApp> {
           initialRating: 3,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
-          unratedColor: Colors.grey[200],
+          unratedColor: Colors.amber.withAlpha(50),
           itemCount: 5,
+          itemSize: 50.0,
           itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
           itemBuilder: (context, _) => Icon(
             _selectedIcon ?? Icons.star,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 /// Defines widgets which are to used as rating bar items.
 class RatingWidget {
-
   /// Defines widget to be used as rating bar item when the item is completely rated.
   final Widget full;
 
@@ -118,14 +117,38 @@ class _NoRatingWidget extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.contain,
         child: enableMask
-            ? ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  unratedColor,
-                  BlendMode.srcATop,
-                ),
+            ? _ColorFilter(
+                color: unratedColor,
                 child: child,
               )
             : child,
+      ),
+    );
+  }
+}
+
+class _ColorFilter extends StatelessWidget {
+  final Widget child;
+  final Color color;
+
+  _ColorFilter({
+    @required this.child,
+    @required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ColorFiltered(
+      colorFilter: ColorFilter.mode(
+        color,
+        BlendMode.srcATop,
+      ),
+      child: ColorFiltered(
+        colorFilter: ColorFilter.mode(
+          Colors.white,
+          BlendMode.srcATop,
+        ),
+        child: child,
       ),
     );
   }
@@ -160,11 +183,10 @@ class _IndicatorClipper extends CustomClipper<Rect> {
 }
 
 /// A widget to display rating as assigned using [rating] property.
-/// 
+///
 /// It's a read only version of [RatingBar].
 /// Use [RatingBar], if interative version is required. i.e. if user input is required.
 class RatingBarIndicator extends StatefulWidget {
-
   /// Defines the rating value for indicator.
   ///
   /// Default = 0.0
@@ -226,7 +248,8 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    _isRTL = (widget.textDirection ?? Directionality.of(context)) == TextDirection.rtl;
+    _isRTL = (widget.textDirection ?? Directionality.of(context)) ==
+        TextDirection.rtl;
     _ratingNumber = widget.rating.truncate() + 1;
     _ratingFraction = widget.rating - _ratingNumber + 1;
     return SingleChildScrollView(
@@ -278,11 +301,8 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
                 fit: BoxFit.contain,
                 child: index + 1 < _ratingNumber
                     ? widget.itemBuilder(context, index)
-                    : ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          widget.unratedColor ?? Colors.grey[200],
-                          BlendMode.srcATop,
-                        ),
+                    : _ColorFilter(
+                        color: widget.unratedColor ?? Colors.grey[200],
                         child: widget.itemBuilder(context, index),
                       ),
               ),
@@ -314,16 +334,15 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
 }
 
 /// A widget to receive rating input from users.
-/// 
-/// [RatingBar] can also be used to display rating 
-/// 
+///
+/// [RatingBar] can also be used to display rating
+///
 /// Prefer using [RatingBarIndicator] instead, if read only version is required.
 /// As RatingBarIndicator supports any fractional rating value.
 class RatingBar extends StatefulWidget {
-
   /// {@template flutterRatingBar.itemCount}
   /// Defines total number of rating bar items.
-  /// 
+  ///
   /// Default = 5
   /// {@endtemplate}
   final int itemCount;
@@ -336,7 +355,7 @@ class RatingBar extends StatefulWidget {
 
   /// {@template flutterRatingBar.itemSize}
   /// Defines width and height of each rating item in the bar.
-  /// 
+  ///
   /// Default = 40.0
   /// {@endtemplate}
   final double itemSize;
@@ -451,7 +470,8 @@ class _RatingBarState extends State<RatingBar> {
 
   @override
   Widget build(BuildContext context) {
-    _isRTL = (widget.textDirection ?? Directionality.of(context)) == TextDirection.rtl;
+    _isRTL = (widget.textDirection ?? Directionality.of(context)) ==
+        TextDirection.rtl;
     if (_ratingHistory != widget.initialRating) {
       _rating = widget.initialRating;
       _ratingHistory = widget.initialRating;
@@ -515,7 +535,8 @@ class _RatingBarState extends State<RatingBar> {
         height: widget.itemSize,
         child: FittedBox(
           fit: BoxFit.contain,
-          child: widget.ratingWidget?.full ?? widget.itemBuilder(context, index),
+          child:
+              widget.ratingWidget?.full ?? widget.itemBuilder(context, index),
         ),
       );
       iconRating += 1.0;
@@ -532,39 +553,36 @@ class _RatingBarState extends State<RatingBar> {
             });
           }
         },
-        onHorizontalDragStart: (_) {
-          if (widget.direction == Axis.horizontal) _glow.value = true;
-        },
-        onHorizontalDragEnd: (_) {
-          if (widget.direction == Axis.horizontal) {
-            _glow.value = false;
-            widget.onRatingUpdate(iconRating);
-            iconRating = 0.0;
-          }
-        },
-        onHorizontalDragUpdate: (dragUpdates) {
-          if (widget.direction == Axis.horizontal) _dragOperation(dragUpdates, widget.direction);
-        },
-        onVerticalDragStart: (_) {
-          if (widget.direction == Axis.vertical) _glow.value = true;
-        },
-        onVerticalDragEnd: (_) {
-          if (widget.direction == Axis.vertical) {
-            _glow.value = false;
-            widget.onRatingUpdate(iconRating);
-            iconRating = 0.0;
-          }
-        },
-        onVerticalDragUpdate: (dragUpdates) {
-          if (widget.direction == Axis.vertical) _dragOperation(dragUpdates, widget.direction);
-        },
+        onHorizontalDragStart: _isHorizontal ? (_) => _glow.value = true : null,
+        onHorizontalDragEnd: _isHorizontal
+            ? (_) {
+                _glow.value = false;
+                widget.onRatingUpdate(iconRating);
+                iconRating = 0.0;
+              }
+            : null,
+        onHorizontalDragUpdate: _isHorizontal
+            ? (dragUpdates) => _dragOperation(dragUpdates, widget.direction)
+            : null,
+        onVerticalDragStart: _isHorizontal ? null : (_) => _glow.value = true,
+        onVerticalDragEnd: _isHorizontal
+            ? null
+            : (_) {
+                _glow.value = false;
+                widget.onRatingUpdate(iconRating);
+                iconRating = 0.0;
+              },
+        onVerticalDragUpdate: _isHorizontal
+            ? null
+            : (dragUpdates) => _dragOperation(dragUpdates, widget.direction),
         child: Padding(
           padding: widget.itemPadding,
           child: ValueListenableBuilder(
             valueListenable: _glow,
             builder: (context, glow, _) {
               if (glow && widget.glow) {
-                Color glowColor = widget.glowColor ?? Theme.of(context).accentColor;
+                Color glowColor =
+                    widget.glowColor ?? Theme.of(context).accentColor;
                 return DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -592,6 +610,8 @@ class _RatingBarState extends State<RatingBar> {
       ),
     );
   }
+
+  bool get _isHorizontal => widget.direction == Axis.horizontal;
 
   void _dragOperation(DragUpdateDetails dragDetails, Axis direction) {
     if (!widget.tapOnlyMode) {
