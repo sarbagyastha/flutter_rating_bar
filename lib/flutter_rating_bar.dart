@@ -117,38 +117,14 @@ class _NoRatingWidget extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.contain,
         child: enableMask
-            ? _ColorFilter(
-                color: unratedColor,
+            ? ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  unratedColor,
+                  BlendMode.dstIn,
+                ),
                 child: child,
               )
             : child,
-      ),
-    );
-  }
-}
-
-class _ColorFilter extends StatelessWidget {
-  final Widget child;
-  final Color color;
-
-  _ColorFilter({
-    @required this.child,
-    @required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ColorFiltered(
-      colorFilter: ColorFilter.mode(
-        color,
-        BlendMode.srcATop,
-      ),
-      child: ColorFiltered(
-        colorFilter: ColorFilter.mode(
-          Colors.white,
-          BlendMode.srcATop,
-        ),
-        child: child,
       ),
     );
   }
@@ -301,8 +277,11 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
                 fit: BoxFit.contain,
                 child: index + 1 < _ratingNumber
                     ? widget.itemBuilder(context, index)
-                    : _ColorFilter(
-                        color: widget.unratedColor ?? Colors.grey[200],
+                    : ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          widget.unratedColor ?? Colors.grey[200],
+                          BlendMode.srcIn,
+                        ),
                         child: widget.itemBuilder(context, index),
                       ),
               ),
