@@ -1,4 +1,4 @@
-## 3.0.1
+## 3.0.1+1
 * Added `minRating` and `maxRating` properties to `RatingBar`.
 
 ## 3.0.0+1
