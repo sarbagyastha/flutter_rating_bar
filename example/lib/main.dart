@@ -221,7 +221,8 @@ class _MyAppState extends State<MyApp> {
     switch (mode) {
       case 1:
         return RatingBar(
-          initialRating: 3,
+          initialRating: 2,
+          minRating: 1,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
           unratedColor: Colors.amber.withAlpha(50),
