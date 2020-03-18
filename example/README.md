@@ -7,7 +7,7 @@
 
 ```dart
 FlutterRatingBar(
-      initialRating: 3,
+      rating: 3,
       fillColor: Colors.amber,
       borderColor: Colors.amber.withAlpha(50),
       allowHalfRating: true,

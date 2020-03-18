@@ -328,8 +328,8 @@ class RatingBar extends StatefulWidget {
   /// {@endtemplate}
   final int itemCount;
 
-  /// Defines the initial rating to be set to the rating bar.
-  final double initialRating;
+  /// Defines the rating to be set to the rating bar.
+  final double rating;
 
   /// Return current rating whenever rating is updated.
   final ValueChanged<double> onRatingUpdate;
@@ -403,7 +403,7 @@ class RatingBar extends StatefulWidget {
 
   RatingBar({
     this.itemCount = 5,
-    this.initialRating = 0.0,
+    this.rating = 0.0,
     @required this.onRatingUpdate,
     this.itemSize = 40.0,
     this.allowHalfRating = false,
@@ -439,8 +439,8 @@ class _RatingBarState extends State<RatingBar> {
   @override
   void initState() {
     super.initState();
-    _rating = widget.initialRating;
-    _ratingHistory = widget.initialRating;
+    _rating = widget.rating;
+    _ratingHistory = widget.rating;
   }
 
   @override
@@ -452,9 +452,9 @@ class _RatingBarState extends State<RatingBar> {
   @override
   Widget build(BuildContext context) {
     _isRTL = (widget.textDirection ?? Directionality.of(context)) == TextDirection.rtl;
-    if (_ratingHistory != widget.initialRating) {
-      _rating = widget.initialRating;
-      _ratingHistory = widget.initialRating;
+    if (_ratingHistory != widget.rating) {
+      _rating = widget.rating;
+      _ratingHistory = widget.rating;
     }
     iconRating = 0.0;
     return Material(

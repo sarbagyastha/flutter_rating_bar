@@ -219,7 +219,7 @@ class _MyAppState extends State<MyApp> {
     switch (mode) {
       case 1:
         return RatingBar(
-          initialRating: 3,
+          rating: _rating,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
           unratedColor: Colors.grey[200],
@@ -237,7 +237,7 @@ class _MyAppState extends State<MyApp> {
         );
       case 2:
         return RatingBar(
-          initialRating: 3,
+          rating: 3,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
           itemCount: 5,
@@ -255,7 +255,7 @@ class _MyAppState extends State<MyApp> {
         );
       case 3:
         return RatingBar(
-          initialRating: 3,
+          rating: 3,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           itemCount: 5,
           itemPadding: EdgeInsets.symmetric(horizontal: 4.0),

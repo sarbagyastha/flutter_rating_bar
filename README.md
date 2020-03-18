@@ -32,7 +32,7 @@ Using itemBuilder
 ![First Way](images/mode1.jpg) 
 ```dart
 RatingBar(
-   initialRating: 3,
+   rating: 3,
    direction: Axis.horizontal,
    allowHalfRating: true,
    itemCount: 5,
@@ -53,7 +53,7 @@ Using rating widgets
 ![Second Way](images/mode2.jpg) 
 ```dart
 RatingBar(
-   initialRating: 3,
+   rating: 3,
    direction: Axis.horizontal,
    allowHalfRating: true,
    itemCount: 5,
@@ -76,7 +76,7 @@ Using item builder with index
 ![Third Way](images/mode3.jpg) 
 ```dart
 RatingBar(
-    initialRating: 3,
+    rating: 3,
     itemCount: 5,
     itemBuilder: (context, index) {
        switch (index) {
