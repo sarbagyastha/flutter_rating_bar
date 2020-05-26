@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Defines widgets which are to used as rating bar items.
@@ -138,7 +139,7 @@ class _ColorFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColorFiltered(
+    return kIsWeb ? child : ColorFiltered(
       colorFilter: ColorFilter.mode(
         color,
         BlendMode.srcATop,
