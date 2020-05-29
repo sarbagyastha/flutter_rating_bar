@@ -13,6 +13,10 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 
 ![DEMO](flutter_rating_bar.gif) 
 
+## Fork Feature
+
+- half rating by tap, NOT "only by drag"
+
 ## Salient Features
 - Set minimum and maximum rating
 - Any widgets can be used as as rating bar/indicator items
