@@ -566,11 +566,45 @@ class _RatingBarState extends State<RatingBar> {
     return IgnorePointer(
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
-        onTap: () {
+        /*onTap: () {
           if (widget.onRatingUpdate != null) {
             widget.onRatingUpdate(index + 1.0);
             setState(() {
               _rating = index + 1.0;
+            });
+          }
+        },*/
+        onTapDown: (TapDownDetails details) {
+          print('onTapDown()');
+          //
+          final RenderBox renderBox = context.findRenderObject();
+          final renderBoxSize = renderBox.size;
+          print(
+              'renderBoxSize: ${renderBoxSize.width},${renderBoxSize.height}');
+          int itemCount = widget.itemCount;
+          //
+          double itemWidth = renderBoxSize.width / itemCount;
+          print('itemWidth: $itemWidth');
+          double itemWidthHalf = itemWidth / 2.5; // IMPORTANT "/2.5"
+          print('itemWidthHalf: $itemWidthHalf');
+          itemWidth = itemWidthHalf*2;
+          //
+          final Offset locationPosition = details.localPosition;
+          print(
+              'locationPosition: ${locationPosition.dx},${locationPosition.dy}');
+          //
+          double rating = index.toDouble();
+          if (locationPosition.dx > itemWidth) {
+            rating += 1;
+          } else if (locationPosition.dx > itemWidthHalf) {
+            rating += 0.5;
+          }
+          print('rating: $rating');
+          //
+          if (widget.onRatingUpdate != null) {
+            widget.onRatingUpdate(rating);
+            setState(() {
+              _rating = rating;
             });
           }
         },
