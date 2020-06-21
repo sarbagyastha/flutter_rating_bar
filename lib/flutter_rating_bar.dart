@@ -576,36 +576,36 @@ class _RatingBarState extends State<RatingBar> {
         },*/
         onTapDown: (TapDownDetails details) {
           print('onTapDown()');
+
           //
-          final RenderBox renderBox = context.findRenderObject();
-          final renderBoxSize = renderBox.size;
-          print(
-              'renderBoxSize: ${renderBoxSize.width},${renderBoxSize.height}');
-          int itemCount = widget.itemCount;
-          //
-          double itemWidth = renderBoxSize.width / itemCount;
-          print('itemWidth: $itemWidth');
-          double itemWidthHalf = itemWidth / 2.5; // IMPORTANT "/2.5"
-          print('itemWidthHalf: $itemWidthHalf');
-          itemWidth = itemWidthHalf*2;
-          //
-          final Offset locationPosition = details.localPosition;
-          print(
-              'locationPosition: ${locationPosition.dx},${locationPosition.dy}');
-          //
-          double rating = index.toDouble();
-          if (locationPosition.dx > itemWidth) {
-            rating += 1;
-          } else if (locationPosition.dx > itemWidthHalf) {
-            rating += 0.5;
-          }
-          print('rating: $rating');
-          //
-          if (widget.onRatingUpdate != null) {
-            widget.onRatingUpdate(rating);
-            setState(() {
-              _rating = rating;
-            });
+
+          if (!widget.tapOnlyMode) {
+            final Offset _pos = details.localPosition;
+            double i;
+            i = _pos.dx / (widget.itemSize + widget.itemPadding.horizontal);
+            var currentRating = index.toDouble() + (widget.allowHalfRating ? i : i
+                .round()
+                .toDouble());
+            print('currentRating: $currentRating');
+            if (currentRating > widget.itemCount) {
+              currentRating = widget.itemCount.toDouble();
+            }
+            if (currentRating < 0) {
+              currentRating = 0.0;
+            }
+            if (_isRTL && widget.direction == Axis.horizontal) {
+              currentRating = widget.itemCount - currentRating;
+            }
+            if (widget.onRatingUpdate != null) {
+              if (currentRating < _minRating) {
+                _rating = _minRating;
+              } else if (currentRating > _maxrating) {
+                _rating = _maxrating;
+              } else {
+                _rating = currentRating;
+              }
+              setState(() {});
+            }
           }
         },
         onHorizontalDragStart: _isHorizontal ? (_) => _glow.value = true : null,
