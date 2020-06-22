@@ -605,6 +605,8 @@ class _RatingBarState extends State<RatingBar> {
                 _rating = currentRating;
               }
               setState(() {});
+              //
+              widget.onRatingUpdate(_rating);
             }
           }
         },
