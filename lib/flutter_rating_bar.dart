@@ -583,6 +583,12 @@ class _RatingBarState extends State<RatingBar> {
             final Offset _pos = details.localPosition;
             double i;
             i = _pos.dx / (widget.itemSize + widget.itemPadding.horizontal);
+            print('i: $i');
+            if (i>0.5) {
+              i=1;
+            } else if (i>0){
+              i=0.5;
+            }
             var currentRating = index.toDouble() + (widget.allowHalfRating ? i : i
                 .round()
                 .toDouble());
