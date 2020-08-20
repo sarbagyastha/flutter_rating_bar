@@ -522,7 +522,6 @@ class _RatingBarState extends State<RatingBar> {
         unratedColor: widget.unratedColor ?? Colors.grey[200],
       );
     } else if (index >= _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
-        index < _rating &&
         widget.allowHalfRating) {
       if (widget.ratingWidget?.half == null) {
         ratingWidget = _HalfRatingWidget(
