@@ -452,7 +452,7 @@ class _RatingBarState extends State<RatingBar> {
   double iconRating = 0.0;
   double _minRating, _maxrating;
   bool _isRTL = false;
-  ValueNotifier<bool> _glow = ValueNotifier(false);
+  final ValueNotifier<bool> _glow = ValueNotifier(false);
 
   @override
   void initState() {
@@ -586,7 +586,7 @@ class _RatingBarState extends State<RatingBar> {
             valueListenable: _glow,
             builder: (context, glow, _) {
               if (glow && widget.glow) {
-                Color glowColor =
+                final glowColor =
                     widget.glowColor ?? Theme.of(context).accentColor;
                 return DecoratedBox(
                   decoration: BoxDecoration(

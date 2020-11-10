@@ -9,7 +9,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var _ratingController = TextEditingController();
+  final _ratingController = TextEditingController();
   double _rating;
   double _userRating = 3.0;
   int _ratingBarMode = 1;
@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    _ratingController.text = "3.0";
+    _ratingController.text = '3.0';
     super.initState();
   }
 
@@ -31,9 +31,10 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.amber,
         appBarTheme: AppBarTheme(
           textTheme: TextTheme(
-            title: Theme.of(context).textTheme.title.copyWith(
-                  color: Colors.white,
-                ),
+            headline6: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(color: Colors.white),
           ),
         ),
       ),
@@ -73,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   _rating != null
                       ? Text(
-                          "Rating: $_rating",
+                          'Rating: $_rating',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )
                       : Container(),
@@ -102,16 +103,16 @@ class _MyAppState extends State<MyApp> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "Enter rating",
-                        labelText: "Enter rating",
+                        hintText: 'Enter rating',
+                        labelText: 'Enter rating',
                         suffixIcon: MaterialButton(
                           onPressed: () {
                             setState(() {
                               _userRating =
-                                  double.parse(_ratingController.text ?? "0.0");
+                                  double.parse(_ratingController.text ?? '0.0');
                             });
                           },
-                          child: Text("Rate"),
+                          child: Text('Rate'),
                         ),
                       ),
                     ),
@@ -134,7 +135,7 @@ class _MyAppState extends State<MyApp> {
                     height: 20.0,
                   ),
                   Text(
-                    "Rating Bar Modes",
+                    'Rating Bar Modes',
                     style: TextStyle(
                       fontWeight: FontWeight.w300,
                     ),
@@ -367,7 +368,7 @@ class IconAlert extends StatelessWidget {
     );
   }
 
-  _iconButton(BuildContext context, IconData icon) => IconButton(
+  Widget _iconButton(BuildContext context, IconData icon) => IconButton(
         icon: Icon(icon),
         onPressed: () => Navigator.pop(context, icon),
         splashColor: Colors.amberAccent,
