@@ -7,48 +7,48 @@ import 'package:flutter/material.dart';
 /// Use [RatingBar], if interactive version is required.
 /// i.e. if user input is required.
 class RatingBarIndicator extends StatefulWidget {
-  /// Defines the rating value for indicator.
-  ///
-  /// Default is 0.0
-  final double rating;
+  RatingBarIndicator({
+    required this.itemBuilder,
+    this.textDirection,
+    this.unratedColor,
+    this.direction = Axis.horizontal,
+    this.itemCount = 5,
+    this.itemPadding = EdgeInsets.zero,
+    this.itemSize = 40.0,
+    this.physics = const NeverScrollableScrollPhysics(),
+    this.rating = 0.0,
+  });
+
+  /// {@macro flutterRatingBar.itemBuilder}
+  final IndexedWidgetBuilder itemBuilder;
+
+  /// {@macro flutterRatingBar.textDirection}
+  final TextDirection? textDirection;
+
+  /// {@macro flutterRatingBar.unratedColor}
+  final Color? unratedColor;
+
+  /// {@macro flutterRatingBar.direction}
+  final Axis direction;
 
   /// {@macro flutterRatingBar.itemCount}
   final int itemCount;
 
-  /// {@macro flutterRatingBar.itemSize}
-  final double itemSize;
-
   /// {@macro flutterRatingBar.itemPadding}
   final EdgeInsets itemPadding;
+
+  /// {@macro flutterRatingBar.itemSize}
+  final double itemSize;
 
   /// Controls the scrolling behaviour of rating bar.
   ///
   /// Default is [NeverScrollableScrollPhysics].
   final ScrollPhysics physics;
 
-  /// {@macro flutterRatingBar.textDirection}
-  final TextDirection textDirection;
-
-  /// {@macro flutterRatingBar.itemBuilder}
-  final IndexedWidgetBuilder itemBuilder;
-
-  /// {@macro flutterRatingBar.direction}
-  final Axis direction;
-
-  /// {@macro flutterRatingBar.unratedColor}
-  final Color unratedColor;
-
-  RatingBarIndicator({
-    @required this.itemBuilder,
-    this.rating = 0.0,
-    this.itemCount = 5,
-    this.itemSize = 40.0,
-    this.itemPadding = EdgeInsets.zero,
-    this.physics = const NeverScrollableScrollPhysics(),
-    this.textDirection,
-    this.direction = Axis.horizontal,
-    this.unratedColor,
-  });
+  /// Defines the rating value for indicator.
+  ///
+  /// Default is 0.0
+  final double rating;
 
   @override
   _RatingBarIndicatorState createState() => _RatingBarIndicatorState();
@@ -160,13 +160,13 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
 }
 
 class _IndicatorClipper extends CustomClipper<Rect> {
-  final double ratingFraction;
-  final bool rtlMode;
-
   _IndicatorClipper({
-    this.ratingFraction,
+    required this.ratingFraction,
     this.rtlMode = false,
   });
+
+  final double ratingFraction;
+  final bool rtlMode;
 
   @override
   Rect getClip(Size size) {
