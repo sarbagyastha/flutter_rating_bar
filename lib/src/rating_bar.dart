@@ -127,7 +127,7 @@ class RatingBar extends StatefulWidget {
     this.itemSize = 40.0,
     this.allowHalfRating = false,
     this.itemBuilder,
-    this.itemPadding = const EdgeInsets.all(0.0),
+    this.itemPadding = EdgeInsets.zero,
     this.ignoreGestures = false,
     this.tapOnlyMode = false,
     this.textDirection,
@@ -258,7 +258,12 @@ class _RatingBarState extends State<RatingBar> {
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
         onTap: () {
-          if (widget.onRatingUpdate != null) {
+          if (index == 0 && _rating == 1) {
+            widget.onRatingUpdate(0);
+            setState(() {
+              _rating = 0;
+            });
+          } else if (widget.onRatingUpdate != null) {
             widget.onRatingUpdate(index + 1.0);
             setState(() {
               _rating = index + 1.0;
