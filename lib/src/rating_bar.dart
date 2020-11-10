@@ -177,7 +177,7 @@ class _RatingBarState extends State<RatingBar> {
   double iconRating = 0.0;
 
   late double _minRating, _maxRating;
-  late ValueNotifier<bool> _glow;
+  late final ValueNotifier<bool> _glow;
 
   @override
   void initState() {
