@@ -19,7 +19,7 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 - Glows on interaction
 - Supports RTL mode
 
-[### Web Demo](https://sarbagyastha.com.np/flutter_rating_bar/)
+#### [Web Demo](https://sarbagyastha.com.np/flutter_rating_bar/)
 
 
 ## Usage
