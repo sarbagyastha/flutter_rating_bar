@@ -462,7 +462,7 @@ class _NoRatingWidget extends StatelessWidget {
             ? ColorFiltered(
                 colorFilter: ColorFilter.mode(
                   unratedColor,
-                  BlendMode.dstIn,
+                  BlendMode.srcIn,
                 ),
                 child: child,
               )
