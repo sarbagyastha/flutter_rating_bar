@@ -1,3 +1,6 @@
+## 4.0.0-nullsafety.1
+* Migrate to null safety.
+
 ## 3.2.0
 **Breaking Changes**
 `RatingBar` is divided into `RatingBar()` and `RatingBar.builder()`.
