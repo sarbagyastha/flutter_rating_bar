@@ -380,12 +380,6 @@ class _RatingBarState extends State<RatingBar> {
 }
 
 class _HalfRatingWidget extends StatelessWidget {
-  final Widget child;
-  final double size;
-  final bool enableMask;
-  final bool rtlMode;
-  final Color unratedColor;
-
   _HalfRatingWidget({
     required this.size,
     required this.child,
@@ -393,6 +387,12 @@ class _HalfRatingWidget extends StatelessWidget {
     required this.rtlMode,
     required this.unratedColor,
   });
+
+  final Widget child;
+  final double size;
+  final bool enableMask;
+  final bool rtlMode;
+  final Color unratedColor;
 
   @override
   Widget build(BuildContext context) {
@@ -432,9 +432,9 @@ class _HalfRatingWidget extends StatelessWidget {
 }
 
 class _HalfClipper extends CustomClipper<Rect> {
-  final bool rtlMode;
-
   _HalfClipper({required this.rtlMode});
+
+  final bool rtlMode;
 
   @override
   Rect getClip(Size size) => rtlMode
@@ -456,17 +456,17 @@ class _HalfClipper extends CustomClipper<Rect> {
 }
 
 class _NoRatingWidget extends StatelessWidget {
-  final double size;
-  final Widget child;
-  final bool enableMask;
-  final Color unratedColor;
-
   _NoRatingWidget({
     required this.size,
     required this.child,
     required this.enableMask,
     required this.unratedColor,
   });
+
+  final double size;
+  final Widget child;
+  final bool enableMask;
+  final Color unratedColor;
 
   @override
   Widget build(BuildContext context) {
