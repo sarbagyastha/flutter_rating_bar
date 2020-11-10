@@ -1,5 +1,8 @@
-## 3.0.0+2
+## 3.1.0
 * **FIXED** `unratedColor` not working for colors with alpha [Issue #15](https://github.com/sarbagyastha/flutter_rating_bar/issues/15).
+
+## 3.0.1+1
+* Added `minRating` and `maxRating` properties to `RatingBar`.
 
 ## 3.0.0+1
 * **FIXED** Issue with scrollable views [Issue #18](https://github.com/sarbagyastha/flutter_rating_bar/issues/18).

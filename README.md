@@ -13,11 +13,12 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 
 ![DEMO](flutter_rating_bar.gif) 
 
-## What's new in v2.x.x and up
+## Salient Features
+- Set minimum and maximum rating
 - Any widgets can be used as as rating bar/indicator items
 - Different widgets can be used in same rating bar as per position
-- Introduced vertical layout
-- Glow on interaction
+- Supports vertical layout
+- Glows on interaction
 - Supports RTL mode
 
 
@@ -33,6 +34,7 @@ Using itemBuilder
 ```dart
 RatingBar(
    initialRating: 3,
+   minRating: 1,
    direction: Axis.horizontal,
    allowHalfRating: true,
    itemCount: 5,

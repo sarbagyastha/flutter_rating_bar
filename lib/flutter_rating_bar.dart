@@ -399,6 +399,16 @@ class RatingBar extends StatefulWidget {
   /// {@endtemplate}
   final Color unratedColor;
 
+  /// Sets minimum rating
+  ///
+  /// Default = 0
+  final double minRating;
+
+  /// Sets maximum rating
+  ///
+  /// Default = [itemCount]
+  final double maxRating;
+
   RatingBar({
     this.itemCount = 5,
     this.initialRating = 0.0,
@@ -416,6 +426,8 @@ class RatingBar extends StatefulWidget {
     this.direction = Axis.horizontal,
     this.glowColor,
     this.unratedColor,
+    this.minRating = 0,
+    this.maxRating,
   }) : assert(
           (itemBuilder == null && ratingWidget != null) ||
               (itemBuilder != null && ratingWidget == null),
@@ -429,16 +441,29 @@ class RatingBar extends StatefulWidget {
 
 class _RatingBarState extends State<RatingBar> {
   double _rating = 0.0;
-  double _ratingHistory = 0.0;
+
+  //double _ratingHistory = 0.0;
   double iconRating = 0.0;
+  double _minRating, _maxrating;
   bool _isRTL = false;
   ValueNotifier<bool> _glow = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
+    _minRating = widget.minRating;
+    _maxrating = widget.maxRating ?? widget.itemCount.toDouble();
     _rating = widget.initialRating;
-    _ratingHistory = widget.initialRating;
+  }
+
+  @override
+  void didUpdateWidget(RatingBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialRating != widget.initialRating) {
+      _rating = widget.initialRating;
+    }
+    _minRating = widget.minRating;
+    _maxrating = widget.maxRating ?? widget.itemCount.toDouble();
   }
 
   @override
@@ -451,10 +476,6 @@ class _RatingBarState extends State<RatingBar> {
   Widget build(BuildContext context) {
     _isRTL = (widget.textDirection ?? Directionality.of(context)) ==
         TextDirection.rtl;
-    if (_ratingHistory != widget.initialRating) {
-      _rating = widget.initialRating;
-      _ratingHistory = widget.initialRating;
-    }
     iconRating = 0.0;
     return Material(
       color: Colors.transparent,
@@ -480,7 +501,6 @@ class _RatingBarState extends State<RatingBar> {
         unratedColor: widget.unratedColor ?? Colors.grey[200],
       );
     } else if (index >= _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
-        index < _rating &&
         widget.allowHalfRating) {
       if (widget.ratingWidget?.half == null) {
         ratingWidget = _HalfRatingWidget(
@@ -613,9 +633,14 @@ class _RatingBarState extends State<RatingBar> {
         currentRating = widget.itemCount - currentRating;
       }
       if (widget.onRatingUpdate != null) {
-        setState(() {
+        if (currentRating < _minRating) {
+          _rating = _minRating;
+        } else if (currentRating > _maxrating) {
+          _rating = _maxrating;
+        } else {
           _rating = currentRating;
-        });
+        }
+        setState(() {});
       }
     }
   }
