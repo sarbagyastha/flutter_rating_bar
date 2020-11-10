@@ -1,3 +1,7 @@
+## 3.2.0
+**Breaking Changes**
+`RatingBar` is divided into `RatingBar()` and `RatingBar.builder()`.
+
 ## 3.1.0
 * Tapping on the first rating item will reset the rating to 0, if the current rating is 1. [Issue #33](https://github.com/sarbagyastha/flutter_rating_bar/issues/33)
 * Added `updateOnDrag` flag for **RatingBar** widget.

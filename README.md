@@ -28,11 +28,11 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 Rating Bar can be used in three ways.
 
 ###### First Way:
-Using itemBuilder
+Using `RatingBar.builder()`
 
 ![First Way](images/mode1.jpg) 
 ```dart
-RatingBar(
+RatingBar.builder(
    initialRating: 3,
    minRating: 1,
    direction: Axis.horizontal,
@@ -50,7 +50,7 @@ RatingBar(
 ```
 
 ###### Second Way:
-Using rating widgets
+Using `RatingBar()`
 
 ![Second Way](images/mode2.jpg) 
 ```dart
@@ -73,11 +73,11 @@ RatingBar(
 Heart Icons are [Available Here](https://github.com/sarbagyastha/flutter_rating_bar/tree/master/example/assets).
 
 ###### Third Way:
-Using item builder with index
+Using `RatingBar.builder()` with index
 
 ![Third Way](images/mode3.jpg) 
 ```dart
-RatingBar(
+RatingBar.builder(
     initialRating: 3,
     itemCount: 5,
     itemBuilder: (context, index) {

@@ -221,7 +221,7 @@ class _MyAppState extends State<MyApp> {
   Widget _ratingBar(int mode) {
     switch (mode) {
       case 1:
-        return RatingBar(
+        return RatingBar.builder(
           initialRating: 2,
           minRating: 1,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
@@ -261,7 +261,7 @@ class _MyAppState extends State<MyApp> {
           updateOnDrag: true,
         );
       case 3:
-        return RatingBar(
+        return RatingBar.builder(
           initialRating: 3,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           itemCount: 5,
