@@ -409,6 +409,11 @@ class RatingBar extends StatefulWidget {
   /// Default = [itemCount]
   final double maxRating;
 
+  /// Defines whether or not the `onRatingUpdate` updates while dragging.
+  ///
+  /// Default is false.
+  final bool updateOnDrag;
+
   RatingBar({
     this.itemCount = 5,
     this.initialRating = 0.0,
@@ -428,6 +433,7 @@ class RatingBar extends StatefulWidget {
     this.unratedColor,
     this.minRating = 0,
     this.maxRating,
+    this.updateOnDrag = false,
   }) : assert(
           (itemBuilder == null && ratingWidget != null) ||
               (itemBuilder != null && ratingWidget == null),
@@ -640,6 +646,7 @@ class _RatingBarState extends State<RatingBar> {
         } else {
           _rating = currentRating;
         }
+        if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
         setState(() {});
       }
     }

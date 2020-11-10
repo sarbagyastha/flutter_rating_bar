@@ -238,6 +238,7 @@ class _MyAppState extends State<MyApp> {
               _rating = rating;
             });
           },
+          updateOnDrag: true,
         );
       case 2:
         return RatingBar(
@@ -256,6 +257,7 @@ class _MyAppState extends State<MyApp> {
               _rating = rating;
             });
           },
+          updateOnDrag: true,
         );
       case 3:
         return RatingBar(
@@ -299,6 +301,7 @@ class _MyAppState extends State<MyApp> {
               _rating = rating;
             });
           },
+          updateOnDrag: true,
         );
       default:
         return Container();
