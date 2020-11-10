@@ -2,11 +2,9 @@
 
 [![Pub](https://img.shields.io/pub/v/flutter_rating_bar.svg)](https://pub.dartlang.org/packages/flutter_rating_bar) 
 [![License](https://img.shields.io/badge/licence-MIT-orange.svg)](https://github.com/sarbagyastha/flutter_rating_bar/blob/master/LICENSE)
-[![Download](https://img.shields.io/badge/download-APK-blueviolet.svg)](https://github.com/sarbagyastha/flutter_rating_bar/raw/master/rating_bar_demo.apk)
+[![Web Demo](https://img.shields.io/badge/Web-Demo-blueviolet.svg)](https://sarbagyastha.com.np/flutter_rating_bar/)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/sarbagyastha/flutter_rating_bar.svg)](https://github.com/sarbagyastha/flutter_rating_bar)
 [![GitHub stars](https://img.shields.io/github/stars/sarbagyastha/flutter_rating_bar.svg?style=social)](https://github.com/sarbagyastha/flutter_rating_bar)
-
-
 
 
 A simple yet fully customizable rating bar for flutter which also include a rating bar indicator, supporting any fraction of rating.
@@ -20,6 +18,8 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 - Supports vertical layout
 - Glows on interaction
 - Supports RTL mode
+
+[### Web Demo](https://sarbagyastha.com.np/flutter_rating_bar/)
 
 
 ## Usage
@@ -144,7 +144,7 @@ Feel Free to request any missing features or report issues [here](https://github
 ## License
 
 ```
-Copyright (c) 2019 Sarbagya Dhaubanjar
+Copyright (c) 2020 Sarbagya Dhaubanjar
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
