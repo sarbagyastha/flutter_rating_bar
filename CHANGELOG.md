@@ -1,3 +1,6 @@
+## 3.1.0
+* **FIXED** `unratedColor` not working for colors with alpha [Issue #15](https://github.com/sarbagyastha/flutter_rating_bar/issues/15).
+
 ## 3.0.1+1
 * Added `minRating` and `maxRating` properties to `RatingBar`.
 
