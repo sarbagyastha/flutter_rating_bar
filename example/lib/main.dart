@@ -9,18 +9,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _ratingController = TextEditingController();
-  double _rating;
+  late final _ratingController;
+  late double _rating;
+
   double _userRating = 3.0;
   int _ratingBarMode = 1;
+  double _initialRating = 2.0;
   bool _isRTLMode = false;
   bool _isVertical = false;
-  IconData _selectedIcon;
+
+  IconData? _selectedIcon;
 
   @override
   void initState() {
-    _ratingController.text = '3.0';
     super.initState();
+    _ratingController = TextEditingController(text: '3.0');
+    _rating = _initialRating;
   }
 
   @override
@@ -34,7 +38,7 @@ class _MyAppState extends State<MyApp> {
             headline6: Theme.of(context)
                 .textTheme
                 .headline6
-                .copyWith(color: Colors.white),
+                ?.copyWith(color: Colors.white),
           ),
         ),
       ),
@@ -69,18 +73,12 @@ class _MyAppState extends State<MyApp> {
                   ),
                   _heading('Rating Bar'),
                   _ratingBar(_ratingBarMode),
-                  SizedBox(
-                    height: 20.0,
+                  SizedBox(height: 20.0),
+                  Text(
+                    'Rating: $_rating',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  _rating != null
-                      ? Text(
-                          'Rating: $_rating',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      : Container(),
-                  SizedBox(
-                    height: 40.0,
-                  ),
+                  SizedBox(height: 40.0),
                   _heading('Rating Indicator'),
                   RatingBarIndicator(
                     rating: _userRating,
@@ -93,9 +91,7 @@ class _MyAppState extends State<MyApp> {
                     unratedColor: Colors.amber.withAlpha(50),
                     direction: _isVertical ? Axis.vertical : Axis.horizontal,
                   ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
+                  SizedBox(height: 20.0),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextFormField(
@@ -107,19 +103,16 @@ class _MyAppState extends State<MyApp> {
                         labelText: 'Enter rating',
                         suffixIcon: MaterialButton(
                           onPressed: () {
-                            setState(() {
-                              _userRating =
-                                  double.parse(_ratingController.text ?? '0.0');
-                            });
+                            _userRating =
+                                double.parse(_ratingController.text ?? '0.0');
+                            setState(() {});
                           },
                           child: Text('Rate'),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 40.0,
-                  ),
+                  SizedBox(height: 40.0),
                   _heading('Scrollable Rating Indicator'),
                   RatingBarIndicator(
                     rating: 8.2,
@@ -131,14 +124,10 @@ class _MyAppState extends State<MyApp> {
                       color: Colors.amber,
                     ),
                   ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
+                  SizedBox(height: 20.0),
                   Text(
                     'Rating Bar Modes',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w300),
                   ),
                   Row(
                     children: [
@@ -152,9 +141,7 @@ class _MyAppState extends State<MyApp> {
                     children: <Widget>[
                       Text(
                         'Switch to Vertical Bar',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                        ),
+                        style: TextStyle(fontWeight: FontWeight.w300),
                       ),
                       Switch(
                         value: _isVertical,
@@ -172,9 +159,7 @@ class _MyAppState extends State<MyApp> {
                     children: <Widget>[
                       Text(
                         'Switch to RTL Mode',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                        ),
+                        style: TextStyle(fontWeight: FontWeight.w300),
                       ),
                       Switch(
                         value: _isRTLMode,
@@ -198,7 +183,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget _radio(int value) {
     return Expanded(
-      child: RadioListTile(
+      child: RadioListTile<int>(
         value: value,
         groupValue: _ratingBarMode,
         dense: true,
@@ -211,7 +196,7 @@ class _MyAppState extends State<MyApp> {
         ),
         onChanged: (value) {
           setState(() {
-            _ratingBarMode = value;
+            _ratingBarMode = value!;
           });
         },
       ),
@@ -222,7 +207,7 @@ class _MyAppState extends State<MyApp> {
     switch (mode) {
       case 1:
         return RatingBar.builder(
-          initialRating: 2,
+          initialRating: _initialRating,
           minRating: 1,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
@@ -243,7 +228,7 @@ class _MyAppState extends State<MyApp> {
         );
       case 2:
         return RatingBar(
-          initialRating: 3,
+          initialRating: _initialRating,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
           itemCount: 5,
@@ -262,7 +247,7 @@ class _MyAppState extends State<MyApp> {
         );
       case 3:
         return RatingBar.builder(
-          initialRating: 3,
+          initialRating: _initialRating,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           itemCount: 5,
           itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
