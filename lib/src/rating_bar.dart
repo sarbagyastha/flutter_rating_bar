@@ -101,7 +101,7 @@ class RatingBar extends StatefulWidget {
   /// {@template flutterRatingBar.unratedColor}
   /// Defines color for the unrated portion.
   ///
-  /// Default = Colors.grey[200]
+  /// Default is [ThemeData.disabledColor].
   /// {@endtemplate}
   final Color unratedColor;
 
@@ -153,18 +153,17 @@ class RatingBar extends StatefulWidget {
 
 class _RatingBarState extends State<RatingBar> {
   double _rating = 0.0;
-
-  //double _ratingHistory = 0.0;
-  double iconRating = 0.0;
-  double _minRating, _maxrating;
+  double _minRating, _maxRating;
   bool _isRTL = false;
-  final ValueNotifier<bool> _glow = ValueNotifier(false);
+  ValueNotifier<bool> _glow;
+  double iconRating = 0.0;
 
   @override
   void initState() {
     super.initState();
+    _glow = ValueNotifier(false);
     _minRating = widget.minRating;
-    _maxrating = widget.maxRating ?? widget.itemCount.toDouble();
+    _maxRating = widget.maxRating ?? widget.itemCount.toDouble();
     _rating = widget.initialRating;
   }
 
@@ -175,7 +174,7 @@ class _RatingBarState extends State<RatingBar> {
       _rating = widget.initialRating;
     }
     _minRating = widget.minRating;
-    _maxrating = widget.maxRating ?? widget.itemCount.toDouble();
+    _maxRating = widget.maxRating ?? widget.itemCount.toDouble();
   }
 
   @override
@@ -186,14 +185,15 @@ class _RatingBarState extends State<RatingBar> {
 
   @override
   Widget build(BuildContext context) {
-    _isRTL = (widget.textDirection ?? Directionality.of(context)) ==
-        TextDirection.rtl;
+    final textDirection = widget.textDirection ?? Directionality.of(context);
+    _isRTL = textDirection == TextDirection.rtl;
     iconRating = 0.0;
+
     return Material(
       color: Colors.transparent,
       child: Wrap(
         alignment: WrapAlignment.start,
-        textDirection: _isRTL ? TextDirection.rtl : TextDirection.ltr,
+        textDirection: textDirection,
         direction: widget.direction,
         children: List.generate(
           widget.itemCount,
@@ -205,12 +205,13 @@ class _RatingBarState extends State<RatingBar> {
 
   Widget _buildRating(BuildContext context, int index) {
     Widget ratingWidget;
+
     if (index >= _rating) {
       ratingWidget = _NoRatingWidget(
         size: widget.itemSize,
         child: widget.ratingWidget?.empty ?? widget.itemBuilder(context, index),
         enableMask: widget.ratingWidget == null,
-        unratedColor: widget.unratedColor ?? Colors.grey[200],
+        unratedColor: widget.unratedColor ?? Theme.of(context).disabledColor,
       );
     } else if (index >= _rating - (widget.allowHalfRating ? 0.5 : 1.0) &&
         widget.allowHalfRating) {
@@ -220,7 +221,7 @@ class _RatingBarState extends State<RatingBar> {
           child: widget.itemBuilder(context, index),
           enableMask: widget.ratingWidget == null,
           rtlMode: _isRTL,
-          unratedColor: widget.unratedColor ?? Colors.grey[200],
+          unratedColor: widget.unratedColor ?? Theme.of(context).disabledColor,
         );
       } else {
         ratingWidget = SizedBox(
@@ -347,8 +348,8 @@ class _RatingBarState extends State<RatingBar> {
       if (widget.onRatingUpdate != null) {
         if (currentRating < _minRating) {
           _rating = _minRating;
-        } else if (currentRating > _maxrating) {
-          _rating = _maxrating;
+        } else if (currentRating > _maxRating) {
+          _rating = _maxRating;
         } else {
           _rating = currentRating;
         }

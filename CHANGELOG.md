@@ -1,4 +1,5 @@
 ## 3.1.0
+* Added `updateOnDrag` flag for **RatingBar** widget.
 * **FIXED** `unratedColor` not working for colors with alpha [Issue #15](https://github.com/sarbagyastha/flutter_rating_bar/issues/15).
 
 ## 3.0.1+1
