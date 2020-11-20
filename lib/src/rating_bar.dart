@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 /// Defines widgets which are to used as rating bar items.
@@ -290,16 +292,17 @@ class _RatingBarState extends State<RatingBar> {
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
         onTapDown: (details) {
-          print(details.localPosition.dx);
-          if (index == 0 && _rating == 1) {
-            widget.onRatingUpdate(0);
-            _rating = 0;
-            setState(() {});
+          double value;
+          if (index == 0 && (_rating == 1 || _rating == 0.5)) {
+            value = 0;
           } else if (widget.onRatingUpdate != null) {
             final tappedPosition = details.localPosition.dx;
             final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
-            final value = index +
+            value = index +
                 (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
+          }
+          if (value != null) {
+            value = math.max(value, widget.minRating);
             widget.onRatingUpdate(value);
             _rating = value;
             setState(() {});
@@ -370,13 +373,7 @@ class _RatingBarState extends State<RatingBar> {
         currentRating = widget.itemCount - currentRating;
       }
       if (widget.onRatingUpdate != null) {
-        if (currentRating < _minRating) {
-          _rating = _minRating;
-        } else if (currentRating > _maxRating) {
-          _rating = _maxRating;
-        } else {
-          _rating = currentRating;
-        }
+        _rating = currentRating.clamp(_minRating, _maxRating);
         if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
         setState(() {});
       }

@@ -223,7 +223,7 @@ class _MyAppState extends State<MyApp> {
       case 1:
         return RatingBar.builder(
           initialRating: 2,
-          minRating: 1,
+          minRating: 0,
           direction: _isVertical ? Axis.vertical : Axis.horizontal,
           allowHalfRating: true,
           unratedColor: Colors.amber.withAlpha(50),
