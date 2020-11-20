@@ -289,14 +289,19 @@ class _RatingBarState extends State<RatingBar> {
     return IgnorePointer(
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
-        onTap: () {
+        onTapDown: (details) {
+          print(details.localPosition.dx);
           if (index == 0 && _rating == 1) {
             widget.onRatingUpdate(0);
             _rating = 0;
             setState(() {});
           } else if (widget.onRatingUpdate != null) {
-            widget.onRatingUpdate(index + 1.0);
-            _rating = index + 1.0;
+            final tappedPosition = details.localPosition.dx;
+            final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
+            final value = index +
+                (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
+            widget.onRatingUpdate(value);
+            _rating = value;
             setState(() {});
           }
         },
