@@ -46,6 +46,7 @@ class RatingBar extends StatefulWidget {
     this.minRating = 0,
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
+    this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = null,
         _ratingWidget = ratingWidget;
 
@@ -72,6 +73,7 @@ class RatingBar extends StatefulWidget {
     this.minRating = 0,
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
+    this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = itemBuilder,
         _ratingWidget = null;
 
@@ -163,6 +165,14 @@ class RatingBar extends StatefulWidget {
   ///
   /// Default is false.
   final bool updateOnDrag;
+
+  /// How the item within the [RatingBar] should be placed in the main axis.
+  ///
+  /// For example, if [wrapAlignment] is [WrapAlignment.center], the item in
+  /// the RatingBar are grouped together in the center of their run in the main axis.
+  ///
+  /// Defaults to [WrapAlignment.start].
+  final WrapAlignment wrapAlignment;
 
   final IndexedWidgetBuilder _itemBuilder;
   final RatingWidget _ratingWidget;
