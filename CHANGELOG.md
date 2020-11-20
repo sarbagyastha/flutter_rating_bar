@@ -1,5 +1,10 @@
-## 4.0.0-nullsafety.1
+## 4.0.0-nullsafety.0
 * Migrate to null safety.
+
+## 3.2.0+1
+* **FIXED** user could rate below `minRating` on tap mode [Issue #40](https://github.com/sarbagyastha/flutter_rating_bar/issues/40).
+* **IMPROVEMENT** user can rate half values in tap mode too (previously it was only possible with drag gesture) [Issue #36](https://github.com/sarbagyastha/flutter_rating_bar/issues/36).
+* Exposed `wrapAlignment` property for `RatingBar` [Issue #28](https://github.com/sarbagyastha/flutter_rating_bar/issues/28).
 
 ## 3.2.0
 **Breaking Changes**

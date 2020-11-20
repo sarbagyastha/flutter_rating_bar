@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 /// Defines widgets which are to used as rating bar items.
@@ -46,6 +48,7 @@ class RatingBar extends StatefulWidget {
     this.minRating = 0,
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
+    this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = null,
         _ratingWidget = ratingWidget;
 
@@ -72,6 +75,7 @@ class RatingBar extends StatefulWidget {
     this.minRating = 0,
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
+    this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = itemBuilder,
         _ratingWidget = null;
 
@@ -163,6 +167,14 @@ class RatingBar extends StatefulWidget {
   ///
   /// Default is false.
   final bool updateOnDrag;
+
+  /// How the item within the [RatingBar] should be placed in the main axis.
+  ///
+  /// For example, if [wrapAlignment] is [WrapAlignment.center], the item in
+  /// the RatingBar are grouped together in the center of their run in the main axis.
+  ///
+  /// Defaults to [WrapAlignment.start].
+  final WrapAlignment wrapAlignment;
 
   final IndexedWidgetBuilder? _itemBuilder;
   final RatingWidget? _ratingWidget;
@@ -280,15 +292,22 @@ class _RatingBarState extends State<RatingBar> {
     return IgnorePointer(
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
-        onTap: () {
-          if (index == 0 && _rating == 1) {
-            widget.onRatingUpdate(0);
-            _rating = 0;
-          } else {
-            widget.onRatingUpdate(index + 1.0);
-            _rating = index + 1.0;
+        onTapDown: (details) {
+          double value;
+          if (index == 0 && (_rating == 1 || _rating == 0.5)) {
+            value = 0;
+          } else if (widget.onRatingUpdate != null) {
+            final tappedPosition = details.localPosition.dx;
+            final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
+            value = index +
+                (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
           }
-          setState(() {});
+          if (value != null) {
+            value = math.max(value, widget.minRating);
+            widget.onRatingUpdate(value);
+            _rating = value;
+            setState(() {});
+          }
         },
         onHorizontalDragStart: _isHorizontal ? _onDragStart : null,
         onHorizontalDragEnd: _isHorizontal ? _onDragEnd : null,
@@ -356,15 +375,11 @@ class _RatingBarState extends State<RatingBar> {
       if (_isRTL && widget.direction == Axis.horizontal) {
         currentRating = widget.itemCount - currentRating;
       }
-      if (currentRating < _minRating) {
-        _rating = _minRating;
-      } else if (currentRating > _maxRating) {
-        _rating = _maxRating;
-      } else {
-        _rating = currentRating;
+      if (widget.onRatingUpdate != null) {
+        _rating = currentRating.clamp(_minRating, _maxRating);
+        if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
+        setState(() {});
       }
-      if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
-      setState(() {});
     }
   }
 
