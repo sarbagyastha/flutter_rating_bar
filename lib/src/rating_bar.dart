@@ -298,7 +298,8 @@ class _RatingBarState extends State<RatingBar> {
           } else if (widget.onRatingUpdate != null) {
             final tappedPosition = details.localPosition.dx;
             final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
-            value = index + (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
+            value = index +
+                (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
           }
           if (value != null) {
             value = math.max(value, widget.minRating);
@@ -319,7 +320,8 @@ class _RatingBarState extends State<RatingBar> {
             valueListenable: _glow,
             builder: (context, glow, child) {
               if (glow && widget.glow) {
-                final glowColor = widget.glowColor ?? Theme.of(context).accentColor;
+                final glowColor =
+                    widget.glowColor ?? Theme.of(context).accentColor;
                 return DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
