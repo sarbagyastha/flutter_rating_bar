@@ -144,7 +144,7 @@ Feel Free to request any missing features or report issues [here](https://github
 ## License
 
 ```
-Copyright (c) 2020 Sarbagya Dhaubanjar
+Copyright (c) 2021 Sarbagya Dhaubanjar
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
