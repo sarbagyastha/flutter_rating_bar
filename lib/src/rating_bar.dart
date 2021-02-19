@@ -144,7 +144,7 @@ class RatingBar extends StatefulWidget {
   /// {@template flutterRatingBar.itemPadding}
   /// The amount of space by which to inset each rating item.
   /// {@endtemplate}
-  final EdgeInsets itemPadding;
+  final EdgeInsetsGeometry itemPadding;
 
   /// {@template flutterRatingBar.itemSize}
   /// Defines width and height of each rating item in the bar.
@@ -298,8 +298,7 @@ class _RatingBarState extends State<RatingBar> {
           } else if (widget.onRatingUpdate != null) {
             final tappedPosition = details.localPosition.dx;
             final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
-            value = index +
-                (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
+            value = index + (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
           }
           if (value != null) {
             value = math.max(value, widget.minRating);
@@ -320,8 +319,7 @@ class _RatingBarState extends State<RatingBar> {
             valueListenable: _glow,
             builder: (context, glow, child) {
               if (glow && widget.glow) {
-                final glowColor =
-                    widget.glowColor ?? Theme.of(context).accentColor;
+                final glowColor = widget.glowColor ?? Theme.of(context).accentColor;
                 return DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
