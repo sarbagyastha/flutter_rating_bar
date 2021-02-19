@@ -144,7 +144,7 @@ class RatingBar extends StatefulWidget {
   /// {@template flutterRatingBar.itemPadding}
   /// The amount of space by which to inset each rating item.
   /// {@endtemplate}
-  final EdgeInsets itemPadding;
+  final EdgeInsetsGeometry itemPadding;
 
   /// {@template flutterRatingBar.itemSize}
   /// Defines width and height of each rating item in the bar.
