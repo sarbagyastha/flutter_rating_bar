@@ -225,7 +225,7 @@ class _RatingBarState extends State<RatingBar> {
     return Material(
       color: Colors.transparent,
       child: Wrap(
-        alignment: WrapAlignment.start,
+        alignment: widget.wrapAlignment,
         textDirection: textDirection,
         direction: widget.direction,
         children: List.generate(
