@@ -32,6 +32,7 @@ class RatingBar extends StatefulWidget {
     /// Customizes the Rating Bar item with [RatingWidget].
     required RatingWidget ratingWidget,
     required this.onRatingUpdate,
+    Key? key,
     this.glowColor,
     this.maxRating,
     this.textDirection,
@@ -50,7 +51,8 @@ class RatingBar extends StatefulWidget {
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = null,
-        _ratingWidget = ratingWidget;
+        _ratingWidget = ratingWidget,
+        super(key: key);
 
   /// Creates [RatingBar] using the [itemBuilder].
   const RatingBar.builder({
@@ -59,6 +61,7 @@ class RatingBar extends StatefulWidget {
     /// {@endtemplate}
     required IndexedWidgetBuilder itemBuilder,
     required this.onRatingUpdate,
+    Key? key,
     this.glowColor,
     this.maxRating,
     this.textDirection,
@@ -77,7 +80,8 @@ class RatingBar extends StatefulWidget {
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = itemBuilder,
-        _ratingWidget = null;
+        _ratingWidget = null,
+        super(key: key);
 
   /// Return current rating whenever rating is updated.
   ///
