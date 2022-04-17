@@ -237,7 +237,7 @@ class _RatingBarState extends State<RatingBar> {
         children: List.generate(
           widget.itemCount,
           (index) => _buildRating(context, index),
-        )._addBetween(separator),
+        )._addBetween(widget.separator),
       ),
     );
   }
