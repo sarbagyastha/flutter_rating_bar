@@ -34,12 +34,10 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.amber,
         appBarTheme: AppBarTheme(
-          textTheme: TextTheme(
-            headline6: Theme.of(context)
-                .textTheme
-                .headline6
-                ?.copyWith(color: Colors.white),
-          ),
+          titleTextStyle: Theme.of(context)
+              .textTheme
+              .headline6
+              ?.copyWith(color: Colors.white),
         ),
       ),
       home: Builder(
