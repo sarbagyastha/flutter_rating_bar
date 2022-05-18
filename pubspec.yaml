@@ -5,8 +5,8 @@ repository: https://github.com/sarbagyastha/flutter_rating_bar
 homepage: https://sarbagyastha.com.np
 
 environment:
-  sdk: '>=2.12.0-0 <3.0.0'
-  flutter: '>=1.12.13+hotfix.5'
+  sdk: '>=2.14.0 <3.0.0'
+  flutter: '>=2.5.0'
 
 dependencies:
   flutter:
