@@ -50,6 +50,7 @@ class RatingBar extends StatefulWidget {
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = null,
+        _emptyItemBuilder = null,
         _ratingWidget = ratingWidget;
 
   /// Creates [RatingBar] using the [itemBuilder].
@@ -58,6 +59,7 @@ class RatingBar extends StatefulWidget {
     /// Widget for each rating bar item.
     /// {@endtemplate}
     required IndexedWidgetBuilder itemBuilder,
+    IndexedWidgetBuilder? emptyItemBuilder,
     required this.onRatingUpdate,
     this.glowColor,
     this.maxRating,
@@ -77,6 +79,7 @@ class RatingBar extends StatefulWidget {
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = itemBuilder,
+        _emptyItemBuilder = emptyItemBuilder,
         _ratingWidget = null;
 
   /// Return current rating whenever rating is updated.
@@ -177,6 +180,7 @@ class RatingBar extends StatefulWidget {
   final WrapAlignment wrapAlignment;
 
   final IndexedWidgetBuilder? _itemBuilder;
+  final IndexedWidgetBuilder? _emptyItemBuilder;
   final RatingWidget? _ratingWidget;
 
   @override
@@ -239,6 +243,7 @@ class _RatingBarState extends State<RatingBar> {
   Widget _buildRating(BuildContext context, int index) {
     final ratingWidget = widget._ratingWidget;
     final item = widget._itemBuilder?.call(context, index);
+    final emptyItem = widget._emptyItemBuilder?.call(context, index);
     final ratingOffset = widget.allowHalfRating ? 0.5 : 1.0;
 
     Widget _ratingWidget;
@@ -246,7 +251,7 @@ class _RatingBarState extends State<RatingBar> {
     if (index >= _rating) {
       _ratingWidget = _NoRatingWidget(
         size: widget.itemSize,
-        child: ratingWidget?.empty ?? item!,
+        child: ratingWidget?.empty ?? emptyItem ?? item!,
         enableMask: ratingWidget == null,
         unratedColor: widget.unratedColor ?? Theme.of(context).disabledColor,
       );

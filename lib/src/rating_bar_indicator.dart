@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 class RatingBarIndicator extends StatefulWidget {
   RatingBarIndicator({
     required this.itemBuilder,
+    this.emptyItemBuilder,
     this.textDirection,
     this.unratedColor,
     this.direction = Axis.horizontal,
@@ -21,6 +22,9 @@ class RatingBarIndicator extends StatefulWidget {
 
   /// {@macro flutterRatingBar.itemBuilder}
   final IndexedWidgetBuilder itemBuilder;
+
+  /// {@macro flutterRatingBar.emptyItemBuilder}
+  final IndexedWidgetBuilder? emptyItemBuilder;
 
   /// {@macro flutterRatingBar.textDirection}
   final TextDirection? textDirection;
@@ -122,13 +126,15 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
               fit: BoxFit.contain,
               child: index + 1 < _ratingNumber
                   ? widget.itemBuilder(context, index)
-                  : ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        widget.unratedColor ?? Theme.of(context).disabledColor,
-                        BlendMode.srcIn,
+                  : widget.emptyItemBuilder?.call(context, index) ??
+                      ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          widget.unratedColor ??
+                              Theme.of(context).disabledColor,
+                          BlendMode.srcIn,
+                        ),
+                        child: widget.itemBuilder(context, index),
                       ),
-                      child: widget.itemBuilder(context, index),
-                    ),
             ),
             if (index + 1 == _ratingNumber)
               if (_isRTL)
