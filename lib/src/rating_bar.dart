@@ -51,6 +51,7 @@ class RatingBar extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
+    this.disableSameSelected = false,
   })  : _itemBuilder = null,
         _ratingWidget = ratingWidget,
         super(key: key);
@@ -80,6 +81,7 @@ class RatingBar extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
+    this.disableSameSelected = false,
   })  : _itemBuilder = itemBuilder,
         _ratingWidget = null,
         super(key: key);
@@ -180,6 +182,11 @@ class RatingBar extends StatefulWidget {
   ///
   /// Defaults to [WrapAlignment.start].
   final WrapAlignment wrapAlignment;
+
+  /// Disable same selected rating star.
+  /// For example if same star is selected again
+  /// then on upDate will not trigger.
+  final bool disableSameSelected;
 
   final IndexedWidgetBuilder? _itemBuilder;
   final RatingWidget? _ratingWidget;
@@ -306,6 +313,9 @@ class _RatingBarState extends State<RatingBar> {
           }
 
           value = math.max(value, widget.minRating);
+          if(widget.disableSameSelected && _rating == value) {
+            return;
+          }
           widget.onRatingUpdate(value);
           _rating = value;
           setState(() {});
