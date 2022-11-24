@@ -301,7 +301,7 @@ class _RatingBarState extends State<RatingBar> {
     return IgnorePointer(
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
-        onTapDown: disabled ? null : (details) {
+        onTapDown: widget.disabled ? null : (details) {
           double value;
           if (index == 0 && (_rating == 1 || _rating == 0.5)) {
             value = 0;
@@ -317,12 +317,12 @@ class _RatingBarState extends State<RatingBar> {
           _rating = value;
           setState(() {});
         },
-        onHorizontalDragStart: _isHorizontal && !disabled ? _onDragStart : null,
-        onHorizontalDragEnd: _isHorizontal && !disabled ? _onDragEnd : null,
-        onHorizontalDragUpdate: _isHorizontal && !disabled ? _onDragUpdate : null,
-        onVerticalDragStart: _isHorizontal || disabled ? null : _onDragStart,
-        onVerticalDragEnd: _isHorizontal || disabled ? null : _onDragEnd,
-        onVerticalDragUpdate: _isHorizontal || disabled ? null : _onDragUpdate,
+        onHorizontalDragStart: _isHorizontal && !widget.disabled ? _onDragStart : null,
+        onHorizontalDragEnd: _isHorizontal && !widget.disabled ? _onDragEnd : null,
+        onHorizontalDragUpdate: _isHorizontal && !widget.disabled ? _onDragUpdate : null,
+        onVerticalDragStart: _isHorizontal || widget.disabled ? null : _onDragStart,
+        onVerticalDragEnd: _isHorizontal || widget.disabled ? null : _onDragEnd,
+        onVerticalDragUpdate: _isHorizontal || widget.disabled ? null : _onDragUpdate,
         child: Padding(
           padding: widget.itemPadding,
           child: ValueListenableBuilder<bool>(
