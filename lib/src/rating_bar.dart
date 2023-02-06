@@ -10,6 +10,7 @@ class RatingWidget {
     required this.empty,
   });
 
+  
   /// Defines widget to be used as rating bar item when the item is completely rated.
   final Widget full;
 
