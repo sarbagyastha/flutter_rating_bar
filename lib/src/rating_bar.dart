@@ -10,6 +10,7 @@ class RatingWidget {
     required this.empty,
   });
 
+  
   /// Defines widget to be used as rating bar item when the item is completely rated.
   final Widget full;
 
@@ -49,6 +50,7 @@ class RatingBar extends StatefulWidget {
     this.itemSize = 40.0,
     this.minRating = 0,
     this.tapOnlyMode = false,
+    this.disabled = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = null,
@@ -79,6 +81,7 @@ class RatingBar extends StatefulWidget {
     this.minRating = 0,
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
+    this.disabled = false,
     this.wrapAlignment = WrapAlignment.start,
   })  : _itemBuilder = itemBuilder,
         _ratingWidget = null,
@@ -125,6 +128,11 @@ class RatingBar extends StatefulWidget {
   ///
   /// Default is true.
   final bool glow;
+ 
+  /// if set to true, Rating Bar is disabled.
+  ///
+  /// Default is false.
+  final bool disabled;
 
   /// Defines the radius of glow.
   ///
@@ -294,7 +302,7 @@ class _RatingBarState extends State<RatingBar> {
     return IgnorePointer(
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
-        onTapDown: (details) {
+        onTapDown: widget.disabled ? null : (details) {
           double value;
           if (index == 0 && (_rating == 1 || _rating == 0.5)) {
             value = 0;
@@ -310,12 +318,12 @@ class _RatingBarState extends State<RatingBar> {
           _rating = value;
           setState(() {});
         },
-        onHorizontalDragStart: _isHorizontal ? _onDragStart : null,
-        onHorizontalDragEnd: _isHorizontal ? _onDragEnd : null,
-        onHorizontalDragUpdate: _isHorizontal ? _onDragUpdate : null,
-        onVerticalDragStart: _isHorizontal ? null : _onDragStart,
-        onVerticalDragEnd: _isHorizontal ? null : _onDragEnd,
-        onVerticalDragUpdate: _isHorizontal ? null : _onDragUpdate,
+        onHorizontalDragStart: _isHorizontal && !widget.disabled ? _onDragStart : null,
+        onHorizontalDragEnd: _isHorizontal && !widget.disabled ? _onDragEnd : null,
+        onHorizontalDragUpdate: _isHorizontal && !widget.disabled ? _onDragUpdate : null,
+        onVerticalDragStart: _isHorizontal || widget.disabled ? null : _onDragStart,
+        onVerticalDragEnd: _isHorizontal || widget.disabled ? null : _onDragEnd,
+        onVerticalDragUpdate: _isHorizontal || widget.disabled ? null : _onDragUpdate,
         child: Padding(
           padding: widget.itemPadding,
           child: ValueListenableBuilder<bool>(
