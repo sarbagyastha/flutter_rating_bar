@@ -2,21 +2,27 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+part 'rating_bar_indicator.dart';
+
 /// Defines widgets which are to used as rating bar items.
 class RatingWidget {
-  RatingWidget({
+  /// Creates [RatingWidget] with the given [full], [half] and [empty] widgets.
+  const RatingWidget({
     required this.full,
     required this.half,
     required this.empty,
   });
 
-  /// Defines widget to be used as rating bar item when the item is completely rated.
+  /// Defines widget to be used as rating bar item
+  /// when the item is completely rated.
   final Widget full;
 
-  /// Defines widget to be used as rating bar item when only the half portion of item is rated.
+  /// Defines widget to be used as rating bar item
+  /// when only the half portion of item is rated.
   final Widget half;
 
-  /// Defines widget to be used as rating bar item when the item is unrated.
+  /// Defines widget to be used as rating bar item
+  /// when the item is unrated.
   final Widget empty;
 }
 
@@ -29,8 +35,6 @@ class RatingWidget {
 class RatingBar extends StatefulWidget {
   /// Creates [RatingBar] using the [ratingWidget].
   const RatingBar({
-    Key? key,
-
     /// Customizes the Rating Bar item with [RatingWidget].
     required RatingWidget ratingWidget,
     required this.onRatingUpdate,
@@ -51,16 +55,15 @@ class RatingBar extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
+    super.key,
   })  : _itemBuilder = null,
-        _ratingWidget = ratingWidget,
-        super(key: key);
+        _ratingWidget = ratingWidget;
 
   /// Creates [RatingBar] using the [itemBuilder].
   const RatingBar.builder({
     /// {@template flutterRatingBar.itemBuilder}
     /// Widget for each rating bar item.
     /// {@endtemplate}
-    Key? key,
     required IndexedWidgetBuilder itemBuilder,
     required this.onRatingUpdate,
     this.glowColor,
@@ -80,13 +83,14 @@ class RatingBar extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
+    super.key,
   })  : _itemBuilder = itemBuilder,
-        _ratingWidget = null,
-        super(key: key);
+        _ratingWidget = null;
 
   /// Return current rating whenever rating is updated.
   ///
-  /// [updateOnDrag] can be used to change the behaviour how the callback reports the update.
+  /// [updateOnDrag] can be used to change the behaviour
+  /// how the callback reports the update.
   final ValueChanged<double> onRatingUpdate;
 
   /// Defines color for glow.
@@ -111,7 +115,8 @@ class RatingBar extends StatefulWidget {
   /// {@endtemplate}
   final Color? unratedColor;
 
-  /// Default [allowHalfRating] = false. Setting true enables half rating support.
+  /// Default [allowHalfRating] = false.
+  /// Setting true enables half rating support.
   final bool allowHalfRating;
 
   /// {@template flutterRatingBar.direction}
@@ -163,7 +168,8 @@ class RatingBar extends StatefulWidget {
   /// Default is 0.
   final double minRating;
 
-  /// if set to true will disable drag to rate feature. Note: Enabling this mode will disable half rating capability.
+  /// if set to true will disable drag to rate feature.
+  /// Note: Enabling this mode will disable half rating capability.
   ///
   /// Default is false.
   final bool tapOnlyMode;
@@ -176,7 +182,8 @@ class RatingBar extends StatefulWidget {
   /// How the item within the [RatingBar] should be placed in the main axis.
   ///
   /// For example, if [wrapAlignment] is [WrapAlignment.center], the item in
-  /// the RatingBar are grouped together in the center of their run in the main axis.
+  /// the RatingBar are grouped together in the center of their run
+  /// in the main axis.
   ///
   /// Defaults to [WrapAlignment.start].
   final WrapAlignment wrapAlignment;
@@ -193,7 +200,8 @@ class _RatingBarState extends State<RatingBar> {
   bool _isRTL = false;
   double iconRating = 0;
 
-  late double _minRating, _maxRating;
+  late double _minRating;
+  late double _maxRating;
   late final ValueNotifier<bool> _glow;
 
   @override
@@ -245,10 +253,10 @@ class _RatingBarState extends State<RatingBar> {
     final item = widget._itemBuilder?.call(context, index);
     final ratingOffset = widget.allowHalfRating ? 0.5 : 1.0;
 
-    Widget _ratingWidget;
+    Widget resolvedRatingWidget;
 
     if (index >= _rating) {
-      _ratingWidget = _NoRatingWidget(
+      resolvedRatingWidget = _NoRatingWidget(
         size: widget.itemSize,
         enableMask: ratingWidget == null,
         unratedColor: widget.unratedColor ?? Theme.of(context).disabledColor,
@@ -256,7 +264,7 @@ class _RatingBarState extends State<RatingBar> {
       );
     } else if (index >= _rating - ratingOffset && widget.allowHalfRating) {
       if (ratingWidget?.half == null) {
-        _ratingWidget = _HalfRatingWidget(
+        resolvedRatingWidget = _HalfRatingWidget(
           size: widget.itemSize,
           enableMask: ratingWidget == null,
           rtlMode: _isRTL,
@@ -264,7 +272,7 @@ class _RatingBarState extends State<RatingBar> {
           child: item!,
         );
       } else {
-        _ratingWidget = SizedBox(
+        resolvedRatingWidget = SizedBox(
           width: widget.itemSize,
           height: widget.itemSize,
           child: FittedBox(
@@ -281,7 +289,7 @@ class _RatingBarState extends State<RatingBar> {
       }
       iconRating += 0.5;
     } else {
-      _ratingWidget = SizedBox(
+      resolvedRatingWidget = SizedBox(
         width: widget.itemSize,
         height: widget.itemSize,
         child: FittedBox(
@@ -345,7 +353,7 @@ class _RatingBarState extends State<RatingBar> {
               }
               return child!;
             },
-            child: _ratingWidget,
+            child: resolvedRatingWidget,
           ),
         ),
       ),
@@ -359,12 +367,12 @@ class _RatingBarState extends State<RatingBar> {
       final box = context.findRenderObject() as RenderBox?;
       if (box == null) return;
 
-      final _pos = box.globalToLocal(dragDetails.globalPosition);
+      final pos = box.globalToLocal(dragDetails.globalPosition);
       double i;
       if (widget.direction == Axis.horizontal) {
-        i = _pos.dx / (widget.itemSize + widget.itemPadding.horizontal);
+        i = pos.dx / (widget.itemSize + widget.itemPadding.horizontal);
       } else {
-        i = _pos.dy / (widget.itemSize + widget.itemPadding.vertical);
+        i = pos.dy / (widget.itemSize + widget.itemPadding.vertical);
       }
       var currentRating = widget.allowHalfRating ? i : i.round().toDouble();
       if (currentRating > widget.itemCount) {

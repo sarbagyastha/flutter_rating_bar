@@ -32,13 +32,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.amber,
-        appBarTheme: AppBarTheme(
-          titleTextStyle: Theme.of(context)
-              .textTheme
-              .headline6
-              ?.copyWith(color: Colors.white),
-        ),
+        colorSchemeSeed: Colors.amber,
+        useMaterial3: true,
+        appBarTheme: AppBarTheme(backgroundColor: Colors.amber),
       ),
       home: Builder(
         builder: (context) => Scaffold(

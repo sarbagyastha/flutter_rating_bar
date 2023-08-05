@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'rating_bar.dart';
 
 /// A widget to display rating as assigned using [rating] property.
 ///
@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 /// Use [RatingBar], if interactive version is required.
 /// i.e. if user input is required.
 class RatingBarIndicator extends StatefulWidget {
+  /// Creates a read only rating bar indicator.
   const RatingBarIndicator({
-    Key? key,
     required this.itemBuilder,
     this.textDirection,
     this.unratedColor,
@@ -18,7 +18,8 @@ class RatingBarIndicator extends StatefulWidget {
     this.itemSize = 40.0,
     this.physics = const NeverScrollableScrollPhysics(),
     this.rating = 0.0,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// {@macro flutterRatingBar.itemBuilder}
   final IndexedWidgetBuilder itemBuilder;
