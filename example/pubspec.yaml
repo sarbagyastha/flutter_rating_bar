@@ -3,8 +3,8 @@ description: Demonstrates how to use the flutter_rating_bar plugin.
 publish_to: 'none'
 
 environment:
-  sdk: '>=2.12.0-0 <3.0.0'
-  flutter: '>=1.12.13+hotfix.5 <2.0.0'
+  sdk: '>=2.14.0 <3.0.0'
+  flutter: '>=2.5.0'
 
 dependencies:
   flutter:

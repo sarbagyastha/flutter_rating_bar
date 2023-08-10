@@ -1,3 +1,6 @@
+## 4.0.1
+* Cleaned up deprecation warnings.
+
 ## 4.0.0
 * Migrate to null safety.
 
