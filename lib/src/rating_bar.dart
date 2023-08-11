@@ -49,6 +49,7 @@ class RatingBar extends StatefulWidget {
     this.ignoreGestures = false,
     this.initialRating = 0.0,
     this.itemCount = 5,
+    this.separator = const SizedBox(),
     this.itemPadding = EdgeInsets.zero,
     this.itemSize = 40.0,
     this.minRating = 0,
@@ -77,6 +78,7 @@ class RatingBar extends StatefulWidget {
     this.ignoreGestures = false,
     this.initialRating = 0.0,
     this.itemCount = 5,
+    this.separator = const SizedBox(),
     this.itemPadding = EdgeInsets.zero,
     this.itemSize = 40.0,
     this.minRating = 0,
@@ -150,6 +152,10 @@ class RatingBar extends StatefulWidget {
   /// Default is 5.
   /// {@endtemplate}
   final int itemCount;
+  
+  /// {@template flutterRatingBar.separator}
+  /// A separator widget between each rating item.
+  final Widget separator;
 
   /// {@template flutterRatingBar.itemPadding}
   /// The amount of space by which to inset each rating item.
@@ -244,7 +250,7 @@ class _RatingBarState extends State<RatingBar> {
         children: List.generate(
           widget.itemCount,
           (index) => _buildRating(context, index),
-        ),
+        )._addBetween(widget.separator),
       ),
     );
   }
@@ -506,5 +512,17 @@ class _NoRatingWidget extends StatelessWidget {
             : child,
       ),
     );
+  }
+}
+
+extension _ListExtension<T> on List<T> {
+  /// Insert [item] between each member of this list
+  List<T> _addBetween(T item) {
+    if (length > 1) {
+      for (int i = length - 1; i > 0; i--) {
+        insert(i, item);
+      }
+    }
+    return this;
   }
 }
