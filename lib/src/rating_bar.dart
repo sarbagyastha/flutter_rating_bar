@@ -303,6 +303,7 @@ class _RatingBarState extends State<RatingBar> {
     return IgnorePointer(
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTapDown: (details) {
           double value;
           if (index == 0 && (_rating == 1 || _rating == 0.5)) {
