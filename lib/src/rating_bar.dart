@@ -55,6 +55,7 @@ class RatingBar extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
+    this.addScaleAnimation = false,
     super.key,
   })  : _itemBuilder = null,
         _ratingWidget = ratingWidget;
@@ -83,6 +84,7 @@ class RatingBar extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
+    this.addScaleAnimation = false,
     super.key,
   })  : _itemBuilder = itemBuilder,
         _ratingWidget = null;
@@ -178,6 +180,9 @@ class RatingBar extends StatefulWidget {
   ///
   /// Default is false.
   final bool updateOnDrag;
+
+  // Add or remove animation when rating is updated.
+  final bool addScaleAnimation;
 
   /// How the item within the [RatingBar] should be placed in the main axis.
   ///
@@ -330,7 +335,7 @@ class _RatingBarState extends State<RatingBar> {
           child: ValueListenableBuilder<bool>(
             valueListenable: _glow,
             builder: (context, glow, child) {
-              if (glow && widget.glow) {
+              if (glow && widget.glow && index < _rating) {
                 final glowColor =
                     widget.glowColor ?? Theme.of(context).colorScheme.secondary;
                 return DecoratedBox(
@@ -349,7 +354,14 @@ class _RatingBarState extends State<RatingBar> {
                       ),
                     ],
                   ),
-                  child: child,
+                  child: widget.addScaleAnimation
+                      ? AnimatedScale(
+                          scale: 1.15,
+                          curve: Curves.easeIn,
+                          duration: const Duration(milliseconds: 1000),
+                          child: child,
+                        )
+                      : child,
                 );
               }
               return child!;
@@ -387,7 +399,10 @@ class _RatingBarState extends State<RatingBar> {
       }
 
       _rating = currentRating.clamp(_minRating, _maxRating);
-      if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
+      if (widget.updateOnDrag) {
+        widget.onRatingUpdate(iconRating);
+        // addAnimation(iconRating, _rating);
+      }
       setState(() {});
     }
   }
