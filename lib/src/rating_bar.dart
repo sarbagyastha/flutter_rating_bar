@@ -54,6 +54,7 @@ class RatingBar extends StatefulWidget {
     this.minRating = 0,
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
+    this.fillOnHover = false,
     this.wrapAlignment = WrapAlignment.start,
     super.key,
   })  : _itemBuilder = null,
@@ -83,6 +84,7 @@ class RatingBar extends StatefulWidget {
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
     this.wrapAlignment = WrapAlignment.start,
+    this.fillOnHover = false,
     super.key,
   })  : _itemBuilder = itemBuilder,
         _ratingWidget = null;
@@ -190,6 +192,8 @@ class RatingBar extends StatefulWidget {
 
   final IndexedWidgetBuilder? _itemBuilder;
   final RatingWidget? _ratingWidget;
+  // Rate on hover
+  final bool fillOnHover;
 
   @override
   State<RatingBar> createState() => _RatingBarState();
@@ -302,59 +306,99 @@ class _RatingBarState extends State<RatingBar> {
 
     return IgnorePointer(
       ignoring: widget.ignoreGestures,
-      child: GestureDetector(
-        onTapDown: (details) {
-          double value;
-          if (index == 0 && (_rating == 1 || _rating == 0.5)) {
-            value = 0;
-          } else {
-            final tappedPosition = details.localPosition.dx;
-            final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
-            value = index +
-                (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
+      child: MouseRegion(
+        onEnter: (event) {
+          if (widget.glow) {
+            _glow.value = true;
           }
-
-          value = math.max(value, widget.minRating);
-          widget.onRatingUpdate(value);
-          _rating = value;
-          setState(() {});
         },
-        onHorizontalDragStart: _isHorizontal ? _onDragStart : null,
-        onHorizontalDragEnd: _isHorizontal ? _onDragEnd : null,
-        onHorizontalDragUpdate: _isHorizontal ? _onDragUpdate : null,
-        onVerticalDragStart: _isHorizontal ? null : _onDragStart,
-        onVerticalDragEnd: _isHorizontal ? null : _onDragEnd,
-        onVerticalDragUpdate: _isHorizontal ? null : _onDragUpdate,
-        child: Padding(
-          padding: widget.itemPadding,
-          child: ValueListenableBuilder<bool>(
-            valueListenable: _glow,
-            builder: (context, glow, child) {
-              if (glow && widget.glow) {
-                final glowColor =
-                    widget.glowColor ?? Theme.of(context).colorScheme.secondary;
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: glowColor.withAlpha(30),
-                        blurRadius: 10,
-                        spreadRadius: widget.glowRadius,
-                      ),
-                      BoxShadow(
-                        color: glowColor.withAlpha(20),
-                        blurRadius: 10,
-                        spreadRadius: widget.glowRadius,
-                      ),
-                    ],
-                  ),
-                  child: child,
-                );
-              }
-              return child!;
-            },
-            child: resolvedRatingWidget,
+        // The onHover callback is called when the mouse is moved over the region.
+        // If widget.glow is true, it sets the _glow value to true. If widget.fillOnHover is true,
+        // it calculates the current rating based on the mouse position and updates
+        //  the _rating value accordingly. It then calls setState to rebuild the widget.
+        onHover: (event) {
+          if (widget.glow) {
+            _glow.value = true;
+          }
+          if (widget.fillOnHover) {
+            final box = context.findRenderObject() as RenderBox?;
+            if (box == null) return;
+
+            final pos = box.globalToLocal(event.position);
+            double i;
+            if (widget.direction == Axis.horizontal) {
+              i = pos.dx / (widget.itemSize + widget.itemPadding.horizontal);
+            } else {
+              i = pos.dy / (widget.itemSize + widget.itemPadding.vertical);
+            }
+            var currentRating =
+                widget.allowHalfRating ? i : i.round().toDouble();
+            if (currentRating > widget.itemCount) {
+              currentRating = widget.itemCount.toDouble();
+            }
+            _rating = currentRating;
+            setState(() {});
+          }
+        },
+        onExit: (event) {
+          if (widget.glow) {
+            _glow.value = false;
+          }
+        },
+        child: GestureDetector(
+          onTapDown: (details) {
+            double value;
+            if (index == 0 && (_rating == 1 || _rating == 0.5)) {
+              value = 0;
+            } else {
+              final tappedPosition = details.localPosition.dx;
+              final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
+              value = index +
+                  (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
+            }
+
+            value = math.max(value, widget.minRating);
+            widget.onRatingUpdate(value);
+            _rating = value;
+            setState(() {});
+          },
+          onHorizontalDragStart: _isHorizontal ? _onDragStart : null,
+          onHorizontalDragEnd: _isHorizontal ? _onDragEnd : null,
+          onHorizontalDragUpdate: _isHorizontal ? _onDragUpdate : null,
+          onVerticalDragStart: _isHorizontal ? null : _onDragStart,
+          onVerticalDragEnd: _isHorizontal ? null : _onDragEnd,
+          onVerticalDragUpdate: _isHorizontal ? null : _onDragUpdate,
+          child: Padding(
+            padding: widget.itemPadding,
+            child: ValueListenableBuilder<bool>(
+              valueListenable: _glow,
+              builder: (context, glow, child) {
+                if (glow && widget.glow) {
+                  final glowColor = widget.glowColor ??
+                      Theme.of(context).colorScheme.secondary;
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: glowColor.withAlpha(30),
+                          blurRadius: 10,
+                          spreadRadius: widget.glowRadius,
+                        ),
+                        BoxShadow(
+                          color: glowColor.withAlpha(20),
+                          blurRadius: 10,
+                          spreadRadius: widget.glowRadius,
+                        ),
+                      ],
+                    ),
+                    child: child,
+                  );
+                }
+                return child!;
+              },
+              child: resolvedRatingWidget,
+            ),
           ),
         ),
       ),
