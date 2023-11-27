@@ -375,7 +375,8 @@ class _RatingBarState extends State<RatingBar> {
       } else {
         i = pos.dy / (widget.itemSize + widget.itemPadding.vertical);
       }
-      var currentRating = widget.allowHalfRating ? i : i.round().toDouble();
+      var currentRating =
+          widget.allowHalfRating ? (i * 2).round() / 2.0 : i.round().toDouble();
       if (currentRating > widget.itemCount) {
         currentRating = widget.itemCount.toDouble();
       }
@@ -387,7 +388,10 @@ class _RatingBarState extends State<RatingBar> {
       }
 
       _rating = currentRating.clamp(_minRating, _maxRating);
+      iconRating = _rating;
+
       if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
+
       setState(() {});
     }
   }
@@ -398,7 +402,11 @@ class _RatingBarState extends State<RatingBar> {
 
   void _onDragEnd(DragEndDetails details) {
     _glow.value = false;
-    widget.onRatingUpdate(iconRating);
+
+    if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
+
+    setState(() {});
+
     iconRating = 0.0;
   }
 }
