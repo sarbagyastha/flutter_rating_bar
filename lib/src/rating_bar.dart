@@ -315,9 +315,8 @@ class _RatingBarState extends State<RatingBar> {
           }
 
           value = math.max(value, widget.minRating);
-          widget.onRatingUpdate(value);
-          _rating = value;
-          setState(() {});
+
+          _update(value, fromDrag: false);
         },
         onHorizontalDragStart: _isHorizontal ? _onDragStart : null,
         onHorizontalDragEnd: _isHorizontal ? _onDragEnd : null,
@@ -387,12 +386,9 @@ class _RatingBarState extends State<RatingBar> {
         currentRating = widget.itemCount - currentRating;
       }
 
-      _rating = currentRating.clamp(_minRating, _maxRating);
-      iconRating = _rating;
+      iconRating = currentRating.clamp(_minRating, _maxRating);
 
-      if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
-
-      setState(() {});
+      _update(iconRating, fromDrag: true);
     }
   }
 
@@ -403,11 +399,20 @@ class _RatingBarState extends State<RatingBar> {
   void _onDragEnd(DragEndDetails details) {
     _glow.value = false;
 
-    if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
-
-    setState(() {});
+    _update(iconRating, fromDrag: true);
 
     iconRating = 0.0;
+  }
+
+  void _update(double value, {bool fromDrag = false}) {
+    if (value != _rating) {
+      if ((fromDrag && widget.updateOnDrag) || !fromDrag) {
+        widget.onRatingUpdate(value);
+        setState(() {
+          _rating = value;
+        });
+      }
+    }
   }
 }
 
