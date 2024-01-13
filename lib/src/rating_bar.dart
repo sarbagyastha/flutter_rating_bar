@@ -315,6 +315,8 @@ class _RatingBarState extends State<RatingBar> {
           }
 
           value = math.max(value, widget.minRating);
+          value =
+              math.min(value, widget.maxRating ?? widget.itemCount.toDouble());
           widget.onRatingUpdate(value);
           _rating = value;
           setState(() {});
