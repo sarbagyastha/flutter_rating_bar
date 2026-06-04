@@ -279,7 +279,7 @@ class _RatingBarState extends State<RatingBar> {
           child: FittedBox(
             child: _isRTL
                 ? Transform(
-                    transform: Matrix4.identity()..scale(-1.0, 1, 1),
+                    transform: Matrix4.diagonal3Values(-1, 1, 1),
                     alignment: Alignment.center,
                     transformHitTests: false,
                     child: ratingWidget!.half,

@@ -99,7 +99,7 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
           if (widget.textDirection == TextDirection.rtl &&
               Directionality.of(context) != TextDirection.rtl) {
             return Transform(
-              transform: Matrix4.identity()..scale(-1.0, 1, 1),
+              transform: Matrix4.diagonal3Values(-1, 1, 1),
               alignment: Alignment.center,
               transformHitTests: false,
               child: _buildItems(index),
