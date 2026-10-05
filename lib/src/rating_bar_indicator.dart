@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A widget to display rating as assigned using [rating] property.
 ///
@@ -101,7 +101,7 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
           if (widget.textDirection == TextDirection.rtl &&
               Directionality.of(context) != TextDirection.rtl) {
             return Transform(
-              transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+              transform: Matrix4.identity()..scaleByDouble(-1.0, 1.0, 1.0, 1.0),
               alignment: Alignment.center,
               transformHitTests: false,
               child: _buildItems(index),

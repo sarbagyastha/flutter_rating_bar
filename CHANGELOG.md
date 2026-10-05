@@ -1,3 +1,11 @@
+## 5.0.0
+**Breaking Changes**
+This version requires `material_ui` and `flutter >= 3.47` (Dart 3.13).
+Apps still on SDK Material should pass `unratedColor` and `glowColor` explicitly.
+
+* Added `emptyItemBuilder` to `RatingBar.builder` and `RatingBarIndicator`.
+* Added `onRatingUpdateFinish` to `RatingBar`, called once the user finishes a tap or drag.
+
 ## 4.0.1
 * Cleaned up deprecation warnings.
 

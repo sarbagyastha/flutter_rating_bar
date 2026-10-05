@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Defines widgets which are to used as rating bar items.
 class RatingWidget {
@@ -278,7 +278,8 @@ class _RatingBarState extends State<RatingBar> {
             fit: BoxFit.contain,
             child: _isRTL
                 ? Transform(
-                    transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+                    transform: Matrix4.identity()
+                      ..scaleByDouble(-1.0, 1.0, 1.0, 1.0),
                     alignment: Alignment.center,
                     transformHitTests: false,
                     child: ratingWidget!.half,

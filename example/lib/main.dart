@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 void main() => runApp(MyApp());
@@ -127,12 +127,20 @@ class _MyAppState extends State<MyApp> {
                     'Rating Bar Modes',
                     style: TextStyle(fontWeight: FontWeight.w300),
                   ),
-                  Row(
-                    children: [
-                      _radio(1),
-                      _radio(2),
-                      _radio(3),
-                    ],
+                  RadioGroup<int>(
+                    groupValue: _ratingBarMode,
+                    onChanged: (value) {
+                      setState(() {
+                        _ratingBarMode = value!;
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        _radio(1),
+                        _radio(2),
+                        _radio(3),
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -148,7 +156,7 @@ class _MyAppState extends State<MyApp> {
                             _isVertical = value;
                           });
                         },
-                        activeColor: Colors.amber,
+                        activeThumbColor: Colors.amber,
                       ),
                     ],
                   ),
@@ -166,7 +174,7 @@ class _MyAppState extends State<MyApp> {
                             _isRTLMode = value;
                           });
                         },
-                        activeColor: Colors.amber,
+                        activeThumbColor: Colors.amber,
                       ),
                     ],
                   ),
@@ -183,7 +191,6 @@ class _MyAppState extends State<MyApp> {
     return Expanded(
       child: RadioListTile<int>(
         value: value,
-        groupValue: _ratingBarMode,
         dense: true,
         title: Text(
           'Mode $value',
@@ -192,11 +199,6 @@ class _MyAppState extends State<MyApp> {
             fontSize: 12.0,
           ),
         ),
-        onChanged: (value) {
-          setState(() {
-            _ratingBarMode = value!;
-          });
-        },
       ),
     );
   }

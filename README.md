@@ -11,6 +11,10 @@ A simple yet fully customizable rating bar for flutter which also include a rati
 
 ![DEMO](flutter_rating_bar.gif) 
 
+## Requirements
+Version 5.0.0 requires Flutter >= 3.47 and uses the [`material_ui`](https://pub.dev/packages/material_ui) package instead of `package:flutter/material.dart`.
+In apps still on SDK Material, pass `unratedColor` and `glowColor` explicitly, because the defaults read the `material_ui` theme.
+
 ## Salient Features
 - Set minimum and maximum rating
 - Any widgets can be used as as rating bar/indicator items
